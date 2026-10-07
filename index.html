@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="my" class="dark h-full">
+<html lang="en" class="dark h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Manager Excellence & Productivity Dashboard PRO v3.0</title>
-    
+    <title>Sales Manager Excellence & Productivity Dashboard PRO v5.0</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -35,7 +34,7 @@
             }
         }
     </script>
-    <!-- Chart.js for analytics visualization -->
+    <!-- Chart.js for analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -57,6 +56,20 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(71, 85, 105, 1);
         }
+        
+        .kanban-col {
+            min-height: 500px;
+        }
+        
+        .dragging {
+            opacity: 0.4;
+            border: 2px dashed #22c55e;
+        }
+
+        .drag-over {
+            background-color: rgba(34, 197, 94, 0.08);
+            border: 2px dashed #16a34a;
+        }
     </style>
 </head>
 <body class="h-full font-sans antialiased flex flex-col md:flex-row overflow-hidden bg-slate-950 dark:bg-slate-950 text-slate-100 transition-colors duration-300">
@@ -72,7 +85,7 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-base text-white tracking-wide">Sales Manager</h1>
-                        <p class="text-xs text-brand-400 font-medium">PRO Hub v3.0 (မြန်မာ)</p>
+                        <p class="text-xs text-brand-400 font-medium" id="sidebarSubtitle">PRO Hub v5.0 (Myanmar/EN)</p>
                     </div>
                 </div>
                 <button id="mobileMenuToggle" class="md:hidden text-slate-400 hover:text-white p-2">
@@ -81,54 +94,76 @@
             </div>
 
             <!-- Navigation Links -->
-            <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-160px)]" id="navContainer">
-                <button data-tab="analytics" class="nav-btn active w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left bg-brand-600/20 text-brand-400 border border-brand-500/30">
-                    <i class="fa-solid fa-gauge-high text-lg w-6 text-center"></i>
-                    <span>Velocity & Revenue Analytics</span>
+            <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-200px)]" id="navContainer">
+                <button data-tab="kanban" class="nav-btn active w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left bg-brand-600/20 text-brand-400 border border-brand-500/30">
+                    <i class="fa-solid fa-table-columns text-lg w-6 text-center"></i>
+                    <span data-i18n="navKanban">Pipeline Kanban Board</span>
                 </button>
-                
+
+                <button data-tab="pitch-evaluator" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-microphone-lines text-lg w-6 text-center"></i>
+                    <span data-i18n="navPitchEval">AI Pitch Audio Evaluator</span>
+                </button>
+
+                <button data-tab="roleplay" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-comments text-lg w-6 text-center"></i>
+                    <span data-i18n="navRoleplay">Sales Roleplay Simulator</span>
+                </button>
+
+                <button data-tab="email-gen" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-paper-plane text-lg w-6 text-center"></i>
+                    <span data-i18n="navEmailGen">Smart Email & Outreach</span>
+                </button>
+
+                <button data-tab="commission" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-calculator text-lg w-6 text-center"></i>
+                    <span data-i18n="navCommission">Commission & Bonus Calc</span>
+                </button>
+
+                <button data-tab="analytics" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-gauge-high text-lg w-6 text-center"></i>
+                    <span data-i18n="navAnalytics">Velocity & Revenue Calc</span>
+                </button>
+
                 <button data-tab="comm-lab" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
                     <i class="fa-solid fa-language text-lg w-6 text-center"></i>
-                    <span>Exec English Comm Lab</span>
+                    <span data-i18n="navCommLab">Exec English Lab</span>
                 </button>
 
                 <button data-tab="reps-matrix" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
                     <i class="fa-solid fa-users-viewfinder text-lg w-6 text-center"></i>
-                    <span>Rep Scorecard & IDP</span>
-                </button>
-
-                <button data-tab="routine-tracker" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
-                    <i class="fa-solid fa-calendar-check text-lg w-6 text-center"></i>
-                    <span>Daily/Weekly Routine</span>
-                </button>
-
-                <button data-tab="objection-playbook" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
-                    <i class="fa-solid fa-shield-halved text-lg w-6 text-center"></i>
-                    <span>Objection Playbook</span>
-                </button>
-
-                <button data-tab="stalled-deal" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
-                    <i class="fa-solid fa-triangle-exclamation text-lg w-6 text-center"></i>
-                    <span>Stalled Deal Recovery</span>
+                    <span data-i18n="navReps">Team Matrix & Leaderboard</span>
                 </button>
             </nav>
         </div>
 
-        <!-- Sidebar Footer & Controls -->
+        <!-- Sidebar Footer Controls -->
         <div class="p-4 border-t border-slate-800 bg-slate-900/50 space-y-3">
             <div class="flex items-center justify-between text-xs text-slate-400">
+                <button id="langToggleBtn" class="flex items-center space-x-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition font-semibold">
+                    <i class="fa-solid fa-globe text-brand-400"></i>
+                    <span id="langText">EN / မြန်မာ</span>
+                </button>
+
+                <button id="currencyToggleBtn" class="flex items-center space-x-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition font-bold">
+                    <span id="currencyText">USD ($)</span>
+                </button>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
                 <button id="themeToggleBtn" class="flex items-center space-x-2 hover:text-white transition">
                     <i class="fa-solid fa-moon text-brand-400" id="themeIcon"></i>
                     <span id="themeText">Dark Mode</span>
                 </button>
                 <div class="flex space-x-2">
-                    <button id="exportStateBtn" title="Export State JSON" class="hover:text-brand-400 transition"><i class="fa-solid fa-download"></i></button>
-                    <button id="importStateBtn" title="Import State JSON" class="hover:text-accent-400 transition"><i class="fa-solid fa-upload"></i></button>
+                    <button id="exportCsvBtn" title="Export Pipeline CSV" class="hover:text-brand-400 transition"><i class="fa-solid fa-file-csv"></i></button>
+                    <button id="exportStateBtn" title="Export Backup JSON" class="hover:text-brand-400 transition"><i class="fa-solid fa-download"></i></button>
+                    <button id="importStateBtn" title="Import Backup JSON" class="hover:text-accent-400 transition"><i class="fa-solid fa-upload"></i></button>
                     <input type="file" id="importFileInput" class="hidden" accept=".json">
                 </div>
             </div>
             <button id="resetDataBtn" class="w-full text-center text-xs text-slate-500 hover:text-red-400 transition pt-1">
-                <i class="fa-solid fa-rotate-right mr-1"></i> Reset Local Data
+                <i class="fa-solid fa-rotate-right mr-1"></i> <span data-i18n="resetData">Reset All Data</span>
             </button>
         </div>
     </aside>
@@ -142,29 +177,401 @@
             <span id="toastMessage" class="text-sm font-medium">Notification Message</span>
         </div>
 
-        <!-- ==================== TAB 1: REVENUE VELOCITY ANALYTICS ==================== -->
-        <section id="tab-analytics" class="tab-content space-y-6">
+        <!-- ==================== TAB 1: KANBAN PIPELINE BOARD ==================== -->
+        <section id="tab-kanban" class="tab-content space-y-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
                 <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Sales Velocity & Revenue Analytics Engine</h2>
-                    <p class="text-slate-400 text-sm mt-1">Pipeline Velocity, Target Funnel တွက်ချက်မှုနှင့် Live Graphical Insights များ</p>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="kanbanTitle">Interactive Sales Pipeline Kanban</h2>
+                    <p class="text-slate-400 text-sm mt-1" data-i18n="kanbanSubtitle">Drag & Drop deals across stages, track probability, and monitor weighted revenue.</p>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <span class="bg-brand-500/10 text-brand-400 border border-brand-500/30 text-xs px-3 py-1.5 rounded-full font-semibold">
-                        <i class="fa-solid fa-bolt mr-1"></i> Real-Time Engine
-                    </span>
+                    <div class="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-right">
+                        <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="weightedValue">Weighted Pipeline Value</div>
+                        <div id="weightedValueDisplay" class="text-lg font-extrabold text-brand-400">$0</div>
+                    </div>
+                    <button id="addDealBtn" class="px-4 py-2.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-2 shadow-lg shadow-brand-600/20">
+                        <i class="fa-solid fa-plus"></i>
+                        <span data-i18n="addDeal">Add New Deal</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Sales Velocity Formula Banner -->
+            <!-- Kanban Columns Container -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 overflow-x-auto pb-4">
+                
+                <!-- Lead In Column -->
+                <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+                            <span class="font-bold text-xs text-slate-200 uppercase tracking-wider" data-i18n="colLead">1. Lead In</span>
+                            <span id="count-lead" class="text-xs bg-slate-800 px-2 py-0.5 rounded-full text-slate-400 font-bold">0</span>
+                        </div>
+                        <div id="col-lead" data-stage="lead" class="kanban-col space-y-3"></div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 text-right text-xs font-bold text-slate-400" id="total-lead">$0</div>
+                </div>
+
+                <!-- Discovery Column -->
+                <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+                            <span class="font-bold text-xs text-amber-400 uppercase tracking-wider" data-i18n="colDiscovery">2. Discovery</span>
+                            <span id="count-discovery" class="text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">0</span>
+                        </div>
+                        <div id="col-discovery" data-stage="discovery" class="kanban-col space-y-3"></div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 text-right text-xs font-bold text-amber-400" id="total-discovery">$0</div>
+                </div>
+
+                <!-- Proposal Column -->
+                <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+                            <span class="font-bold text-xs text-accent-400 uppercase tracking-wider" data-i18n="colProposal">3. Proposal Sent</span>
+                            <span id="count-proposal" class="text-xs bg-accent-500/10 text-accent-400 border border-accent-500/20 px-2 py-0.5 rounded-full font-bold">0</span>
+                        </div>
+                        <div id="col-proposal" data-stage="proposal" class="kanban-col space-y-3"></div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 text-right text-xs font-bold text-accent-400" id="total-proposal">$0</div>
+                </div>
+
+                <!-- Closing Column -->
+                <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+                            <span class="font-bold text-xs text-purple-400 uppercase tracking-wider" data-i18n="colClosing">4. Closing / Neg</span>
+                            <span id="count-closing" class="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded-full font-bold">0</span>
+                        </div>
+                        <div id="col-closing" data-stage="closing" class="kanban-col space-y-3"></div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 text-right text-xs font-bold text-purple-400" id="total-closing">$0</div>
+                </div>
+
+                <!-- Won/Lost Column -->
+                <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+                            <span class="font-bold text-xs text-brand-400 uppercase tracking-wider" data-i18n="colWon">5. Closed Won</span>
+                            <span id="count-won" class="text-xs bg-brand-500/10 text-brand-400 border border-brand-500/20 px-2 py-0.5 rounded-full font-bold">0</span>
+                        </div>
+                        <div id="col-won" data-stage="won" class="kanban-col space-y-3"></div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 text-right text-xs font-bold text-brand-400" id="total-won">$0</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: AI AUDIO PITCH EVALUATOR ==================== -->
+        <section id="tab-pitch-evaluator" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="pitchTitle">AI Audio Pitch Evaluator & Speech-to-Text</h2>
+                <p class="text-slate-400 text-sm mt-1" data-i18n="pitchSubtitle">Record your voice pitch, measure Speaking Speed (WPM), detect filler words, and analyze sales score in real-time.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Microphone Controls -->
+                <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-5">
+                    <h3 class="text-base font-bold text-white flex items-center border-b border-slate-800 pb-3">
+                        <i class="fa-solid fa-microphone text-brand-400 mr-2"></i>
+                        <span data-i18n="voiceRecorder">Voice Pitch Recorder</span>
+                    </h3>
+
+                    <div class="p-6 bg-slate-950 rounded-xl border border-slate-800 flex flex-col items-center space-y-4 text-center">
+                        <div id="recordingStatusRing" class="w-20 h-20 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center transition-all duration-300">
+                            <i class="fa-solid fa-microphone text-2xl text-slate-400" id="micIcon"></i>
+                        </div>
+                        <div id="recordingTimer" class="font-mono text-xl font-bold text-white">00:00</div>
+                        
+                        <div class="flex space-x-3">
+                            <button id="startMicBtn" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow-lg shadow-brand-500/20">
+                                <i class="fa-solid fa-play"></i>
+                                <span data-i18n="startRecording">Start Pitch</span>
+                            </button>
+                            <button id="stopMicBtn" disabled class="px-5 py-2.5 bg-slate-800 hover:bg-red-600 text-slate-400 hover:text-white rounded-xl text-xs font-bold transition flex items-center space-x-2">
+                                <i class="fa-solid fa-stop"></i>
+                                <span data-i18n="stopRecording">Stop & Evaluate</span>
+                            </button>
+                        </div>
+                        <p class="text-[11px] text-slate-500 italic" data-i18n="micHint">Uses Web Speech API natively. No server or API key required.</p>
+                    </div>
+
+                    <!-- Target Pitch Keywords Input -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider" data-i18n="keywordsLabel">Key Pitch Value Words to Match</label>
+                        <input type="text" id="targetKeywordsInput" value="roi, efficiency, revenue, automation, forecast, value, growth, performance" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white outline-none focus:border-brand-500">
+                        <p class="text-[10px] text-slate-500" data-i18n="keywordsHint">Comma-separated target terms to check in pitch transcript.</p>
+                    </div>
+                </div>
+
+                <!-- Speech Analysis Results -->
+                <div class="lg:col-span-7 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-5">
+                    <h3 class="text-base font-bold text-white flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span><i class="fa-solid fa-chart-pie text-accent-400 mr-2"></i> <span data-i18n="pitchMetrics">Speech Analytics Metrics</span></span>
+                        <span id="pitchGradeBadge" class="text-xs px-3 py-1 rounded-full font-bold bg-slate-800 text-slate-400">Grade: Pending</span>
+                    </h3>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="metricSpeed">Pacing Speed</div>
+                            <div id="statWpm" class="text-xl font-bold text-amber-400">0 WPM</div>
+                            <div class="text-[9px] text-slate-500">Ideal: 130-160 WPM</div>
+                        </div>
+
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="metricFillers">Filler Words</div>
+                            <div id="statFillers" class="text-xl font-bold text-red-400">0</div>
+                            <div class="text-[9px] text-slate-500">um, ah, like, you know</div>
+                        </div>
+
+                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold" data-i18n="metricImpact">Value Score</div>
+                            <div id="statImpact" class="text-xl font-bold text-brand-400">0%</div>
+                            <div class="text-[9px] text-slate-500">Keyword Density</div>
+                        </div>
+                    </div>
+
+                    <!-- Transcript Area -->
+                    <div class="space-y-2">
+                        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider" data-i18n="transcriptTitle">Live Audio Speech-to-Text Transcript</div>
+                        <div id="transcriptBox" class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 h-36 overflow-y-auto leading-relaxed italic">
+                            Click 'Start Pitch' and begin speaking into your microphone...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: SALES ROLEPLAY SIMULATOR ==================== -->
+        <section id="tab-roleplay" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="roleplayTitle">Interactive Sales Roleplay Simulator</h2>
+                <p class="text-slate-400 text-sm mt-1" data-i18n="roleplaySubtitle">Choose a customer persona, make interactive responses, and manage buyer sentiment dynamically.</p>
+            </div>
+
+            <!-- Scenario Selection Bar -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="roleplayPersonas">
+                <button data-persona="price" class="persona-btn active p-4 bg-slate-900 border-2 border-brand-500 rounded-2xl text-left transition space-y-1">
+                    <div class="font-bold text-sm text-white flex items-center">
+                        <i class="fa-solid fa-tags text-amber-400 mr-2"></i> U Kyaw Swar (SMB Owner)
+                    </div>
+                    <p class="text-xs text-slate-400">Price-Conscious & Budget Sensitive</p>
+                </button>
+
+                <button data-persona="procurement" class="persona-btn p-4 bg-slate-900 border border-slate-800 rounded-2xl text-left transition space-y-1 hover:border-slate-700">
+                    <div class="font-bold text-sm text-white flex items-center">
+                        <i class="fa-solid fa-building text-accent-400 mr-2"></i> Daw Thin Thin (Procurement VP)
+                    </div>
+                    <p class="text-xs text-slate-400">Rigid Enterprise Compliance & SLA</p>
+                </button>
+
+                <button data-persona="tech" class="persona-btn p-4 bg-slate-900 border border-slate-800 rounded-2xl text-left transition space-y-1 hover:border-slate-700">
+                    <div class="font-bold text-sm text-white flex items-center">
+                        <i class="fa-solid fa-code text-purple-400 mr-2"></i> Ko Min Thu (CTO)
+                    </div>
+                    <p class="text-xs text-slate-400">Skeptical Tech Lead & Security Focused</p>
+                </button>
+            </div>
+
+            <!-- Main Interactive Simulator Window -->
+            <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-6">
+                <!-- Sentiment Bar -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center text-xs font-bold">
+                        <span class="text-slate-300" data-i18n="buyerSentiment">Buyer Trust & Sentiment Level</span>
+                        <span id="sentimentValue" class="text-brand-400 font-extrabold text-sm">50%</span>
+                    </div>
+                    <div class="w-full bg-slate-950 rounded-full h-3 border border-slate-800 overflow-hidden">
+                        <div id="sentimentBar" class="bg-brand-500 h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+                    </div>
+                </div>
+
+                <!-- Chat Dialogue Window -->
+                <div id="roleplayChatBox" class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-4 max-h-80 overflow-y-auto">
+                    <!-- Dialogue dynamically appended -->
+                </div>
+
+                <!-- Branching Choices Bar -->
+                <div class="space-y-3">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="chooseResponse">Choose Your Sales Response:</div>
+                    <div id="roleplayChoices" class="grid grid-cols-1 gap-3">
+                        <!-- Choices dynamically inserted -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: SMART EMAIL GENERATOR ==================== -->
+        <section id="tab-email-gen" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="emailTitle">Smart Outreach & Follow-Up Email Generator</h2>
+                <p class="text-slate-400 text-sm mt-1" data-i18n="emailSubtitle">Generate high-converting C-Suite Cold Outreach, Follow-ups, and Re-engagement Emails instantly.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                    <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3" data-i18n="outreachVariables">Outreach Variables</h3>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="emailType">Outreach Type</label>
+                        <select id="emailTypeSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:border-brand-500">
+                            <option value="cold_exec">C-Suite Cold Value Pitch</option>
+                            <option value="post_demo">Post-Demo Discovery Follow-up</option>
+                            <option value="stalled">Stalled Deal Break-up Email</option>
+                            <option value="linkedin">LinkedIn Connection InMail Script</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="prospectName">Prospect Name & Title</label>
+                        <input type="text" id="emailProspect" value="U Than Htun (CEO)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="companyName">Target Company</label>
+                        <input type="text" id="emailCompany" value="First Logistics Myanmar" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="painPoint">Primary Pain Point / Goal</label>
+                        <input type="text" id="emailPain" value="high operational costs & slow delivery turnaround" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="offerVal">Key Solution Offer Metric</label>
+                        <input type="text" id="emailOffer" value="30% delivery time reduction within 60 days" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                            <h3 class="text-base font-bold text-white" data-i18n="generatedScript">Generated Email Template</h3>
+                            <div class="flex space-x-2">
+                                <button onclick="copyToClipboard('emailScriptOutput')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 rounded-lg flex items-center space-x-1">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span data-i18n="copyBtn">Copy</span>
+                                </button>
+                                <a id="mailtoLink" href="#" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-xs text-white font-semibold rounded-lg flex items-center space-x-1">
+                                    <i class="fa-solid fa-envelope"></i>
+                                    <span data-i18n="mailtoBtn">Open in Mail</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div id="emailScriptOutput" class="mt-4 p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-line">
+                            <!-- Script dynamically updated -->
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between items-center">
+                        <span class="text-xs text-slate-400" data-i18n="audioPronunciation">Listen to English audio pronunciation:</span>
+                        <button onclick="speakText(document.getElementById('emailScriptOutput').innerText)" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-medium flex items-center space-x-1.5 transition">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span data-i18n="speakBtn">Play Speech</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: COMMISSION CALCULATOR ==================== -->
+        <section id="tab-commission" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="commTitle">Tiered Commission & Bonus Accelerator Calculator</h2>
+                <p class="text-slate-400 text-sm mt-1" data-i18n="commSubtitle">Calculate base earnings, quota achievement %, and tier accelerators automatically.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Variables Input -->
+                <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                    <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3" data-i18n="payoutVariables">Quota & Rate Inputs</h3>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="baseSalary">Base Salary Amount</label>
+                        <input type="number" id="commBaseSalary" value="1500" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="quotaTarget">Target Quota Revenue</label>
+                        <input type="number" id="commQuotaTarget" value="50000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="actualClosed">Actual Revenue Achieved</label>
+                        <input type="number" id="commActualSales" value="65000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="baseCommRate">Base Commission Rate (%)</label>
+                        <input type="number" id="commBaseRate" value="5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="acceleratorRate">100%+ Quota Accelerator Bonus Rate (%)</label>
+                        <input type="number" id="commAccelRate" value="8" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
+                    </div>
+                </div>
+
+                <!-- Payout Summary Display -->
+                <div class="lg:col-span-7 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3" data-i18n="totalPayoutSummary">Estimated Earnings Breakdown</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                                <div class="text-xs text-slate-400" data-i18n="quotaAttained">Quota Attainment</div>
+                                <div id="displayAttainment" class="text-2xl font-extrabold text-amber-400">130%</div>
+                            </div>
+
+                            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                                <div class="text-xs text-slate-400" data-i18n="totalPayout">Total Projected Earnings</div>
+                                <div id="displayTotalPayout" class="text-2xl font-extrabold text-brand-400">$5,200</div>
+                            </div>
+                        </div>
+
+                        <!-- Stacked Breakdown Table -->
+                        <div class="mt-6 space-y-2 text-xs">
+                            <div class="flex justify-between p-2.5 bg-slate-950/60 rounded-lg border border-slate-800">
+                                <span class="text-slate-400" data-i18n="baseSalaryLabel">Base Salary:</span>
+                                <span id="breakdownBase" class="font-bold text-white">$1,500</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-slate-950/60 rounded-lg border border-slate-800">
+                                <span class="text-slate-400" data-i18n="baseCommLabel">Base Commission (up to 100% Target):</span>
+                                <span id="breakdownBaseComm" class="font-bold text-white">$2,500</span>
+                            </div>
+                            <div class="flex justify-between p-2.5 bg-slate-950/60 rounded-lg border border-slate-800">
+                                <span class="text-slate-400" data-i18n="accelBonusLabel">Accelerator Bonus (Over 100% Target):</span>
+                                <span id="breakdownAccel" class="font-bold text-brand-400">$1,200</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-brand-500/10 border border-brand-500/30 rounded-xl text-xs text-brand-300">
+                        <i class="fa-solid fa-lightbulb mr-1.5"></i>
+                        <span data-i18n="commTip">Setting accelerator tiers above 100% quota incentivizes top reps to overachieve monthly targets.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 6: REVENUE ANALYTICS ==================== -->
+        <section id="tab-analytics" class="tab-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="analyticsTitle">Sales Velocity & Funnel Engine</h2>
+                    <p class="text-slate-400 text-sm mt-1" data-i18n="analyticsSubtitle">Pipeline Velocity, Target Funnel math and real-time Chart.js graphics.</p>
+                </div>
+            </div>
+
+            <!-- Formula Banner -->
             <div class="p-5 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-900/90 border border-slate-800 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-6">
                 <div class="space-y-1">
-                    <div class="text-xs font-bold text-brand-400 uppercase tracking-wider">Core Formula</div>
-                    <h3 class="text-lg font-bold text-white">Sales Velocity = (Open Deals × Win Rate % × Avg Deal Size) / Cycle Length (Days)</h3>
-                    <p class="text-xs text-slate-400">တစ်ရက်လျှင် Pipeline မှ ထွက်ရှိလာမည့် မျှော်မှန်း ရောင်းအားပမာဏ (Revenue generated per day)</p>
+                    <div class="text-xs font-bold text-brand-400 uppercase tracking-wider">Velocity Formula</div>
+                    <h3 class="text-sm md:text-base font-bold text-white">Velocity = (Deals × Win Rate % × Avg Deal Size) / Cycle Length (Days)</h3>
                 </div>
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center min-w-[200px]">
-                    <div class="text-xs text-slate-400">Current Velocity</div>
+                    <div class="text-xs text-slate-400">Current Sales Velocity</div>
                     <div id="velocityDisplay" class="text-2xl font-extrabold text-brand-400">$1,666 / day</div>
                     <div id="monthlyVelocityDisplay" class="text-[11px] text-slate-500 mt-0.5">~$50,000 / month</div>
                 </div>
@@ -174,39 +581,31 @@
                 <!-- Controls -->
                 <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
                     <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center">
-                        <i class="fa-solid fa-sliders text-brand-400 mr-2"></i> Pipeline Variables Input
+                        <i class="fa-solid fa-sliders text-brand-400 mr-2"></i> Variables Input
                     </h3>
 
-                    <div class="space-y-3.5">
+                    <div class="space-y-3">
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Target Revenue Goal ($)</label>
-                            <input type="number" id="calcTargetRevenue" value="60000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white font-semibold focus:border-brand-500 outline-none transition text-sm">
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Target Revenue Goal</label>
+                            <input type="number" id="calcTargetRevenue" value="60000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Average Deal Size ($)</label>
-                            <input type="number" id="calcAvgDealSize" value="3000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white font-semibold focus:border-brand-500 outline-none transition text-sm">
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Average Deal Size</label>
+                            <input type="number" id="calcAvgDealSize" value="3000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Sales Cycle Length (Days)</label>
-                            <input type="number" id="calcCycleLength" value="30" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white font-semibold focus:border-brand-500 outline-none transition text-sm">
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Sales Cycle Length (Days)</label>
+                            <input type="number" id="calcCycleLength" value="30" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none">
                         </div>
 
                         <div>
-                            <div class="flex justify-between text-xs font-medium text-slate-300 mb-1">
+                            <div class="flex justify-between text-xs font-semibold text-slate-300 mb-1">
                                 <span>Win Rate %</span>
-                                <span id="calcWinRateVal" class="text-brand-400 font-bold">25%</span>
+                                <span id="calcWinRateVal" class="text-brand-400">25%</span>
                             </div>
                             <input type="range" id="calcWinRate" min="5" max="80" value="25" class="w-full accent-brand-500 cursor-pointer">
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between text-xs font-medium text-slate-300 mb-1">
-                                <span>Lead to Meeting Conversion %</span>
-                                <span id="calcLeadRateVal" class="text-brand-400 font-bold">20%</span>
-                            </div>
-                            <input type="range" id="calcLeadRate" min="5" max="60" value="20" class="w-full accent-brand-500 cursor-pointer">
                         </div>
                     </div>
                 </div>
@@ -214,131 +613,42 @@
                 <!-- Live Chart Visualization -->
                 <div class="lg:col-span-7 p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-between space-y-4">
                     <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                        <h3 class="text-base font-bold text-white">Required Pipeline Funnel & Conversion Breakdown</h3>
+                        <h3 class="text-base font-bold text-white">Pipeline Conversion Breakdown</h3>
                         <span class="text-xs text-slate-400" id="funnelTotalSummary">20 Won Deals Needed</span>
                     </div>
 
-                    <div class="h-64 relative">
+                    <div class="h-60 relative">
                         <canvas id="funnelChart"></canvas>
                     </div>
-
-                    <div class="grid grid-cols-4 gap-2 text-center pt-2">
-                        <div class="p-2 bg-slate-950 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400">Total Leads</div>
-                            <div id="statLeads" class="text-sm font-bold text-purple-400">400</div>
-                        </div>
-                        <div class="p-2 bg-slate-950 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400">Meetings</div>
-                            <div id="statMeetings" class="text-sm font-bold text-amber-400">80</div>
-                        </div>
-                        <div class="p-2 bg-slate-950 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400">Proposals</div>
-                            <div id="statProposals" class="text-sm font-bold text-accent-400">40</div>
-                        </div>
-                        <div class="p-2 bg-slate-950 rounded-xl border border-slate-800">
-                            <div class="text-[10px] text-slate-400">Closed Won</div>
-                            <div id="statDeals" class="text-sm font-bold text-brand-400">20</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ==================== TAB 2: EXEC ENGLISH COMM LAB ==================== -->
+        <!-- ==================== TAB 7: EXEC ENGLISH LAB ==================== -->
         <section id="tab-comm-lab" class="tab-content hidden space-y-6">
             <div class="border-b border-slate-800 pb-5">
-                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Executive Business English & Pitching Lab</h2>
-                <p class="text-slate-400 text-sm mt-1">အသံထွက်လေ့ကျင့်ရန် Voice Pitch Simulator၊ အမေးအဖြေ Roleplay နှင့် Email/Proposal Generator</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="labTitle">Executive Business English Phrasebook</h2>
+                <p class="text-slate-400 text-sm mt-1" data-i18n="labSubtitle">Listen to native audio pronunciation for closing, negotiation, and C-level pitching phrases.</p>
             </div>
 
-            <!-- Sub-tabs for Comm Lab -->
-            <div class="flex space-x-3 border-b border-slate-800 pb-3" id="commSubTabs">
-                <button data-subtab="generator" class="comm-sub-btn active px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold">Email & Proposal Generator</button>
-                <button data-subtab="pitch-scenarios" class="comm-sub-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold border border-slate-800">Pitch & QBR Roleplay Simulator</button>
-            </div>
-
-            <!-- Subtab Content 1: Email Generator -->
-            <div id="commSubContent-generator" class="space-y-5">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
-                        <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3">Template Selector</h3>
-                        
-                        <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Scenario Template</label>
-                            <select id="emailTemplateSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:border-brand-500">
-                                <option value="csuite">C-Suite Executive Cold Outreach</option>
-                                <option value="followup">Post-Meeting Follow-up & Next Steps</option>
-                                <option value="price_increase">Professional Price Adjustment Notice</option>
-                                <option value="contract_close">Final Contract & Closing Push</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Client / Prospect Name</label>
-                            <input type="text" id="emailClientName" value="U Kyaw Swar (CEO)" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:border-brand-500">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Company / Product Name</label>
-                            <input type="text" id="emailCompanyName" value="Apex Retail Solutions" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:border-brand-500">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-slate-300 mb-1">Key Value / Impact Metric</label>
-                            <input type="text" id="emailValueMetric" value="35% increase in operational throughput" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white outline-none focus:border-brand-500">
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-7 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                                <h3 class="text-base font-bold text-white">Generated Executive Email Template</h3>
-                                <button onclick="copyToClipboard('generatedEmailOutput')" class="text-xs text-brand-400 hover:underline flex items-center space-x-1">
-                                    <i class="fa-regular fa-copy"></i>
-                                    <span>Copy Email</span>
-                                </button>
-                            </div>
-                            
-                            <div id="generatedEmailOutput" class="mt-4 p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-200 leading-relaxed font-sans whitespace-pre-line">
-                                <!-- Dynamic Email Output -->
-                            </div>
-                        </div>
-
-                        <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 flex justify-between items-center">
-                            <span class="text-xs text-slate-400">Listen to English audio pronunciation:</span>
-                            <button onclick="speakText(document.getElementById('generatedEmailOutput').innerText)" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white rounded-lg text-xs font-medium flex items-center space-x-1.5 transition">
-                                <i class="fa-solid fa-volume-high"></i>
-                                <span>Play Pronunciation</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Subtab Content 2: Pitch Scenarios -->
-            <div id="commSubContent-pitch-scenarios" class="hidden space-y-5">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="pitchScenariosContainer">
-                    <!-- JS Generated Pitch Cards -->
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="phrasebookContainer">
+                <!-- Dynamically generated pitch cards -->
             </div>
         </section>
 
-        <!-- ==================== TAB 3: REP SCORECARD & IDP ==================== -->
+        <!-- ==================== TAB 8: TEAM MATRIX & LEADERBOARD ==================== -->
         <section id="tab-reps-matrix" class="tab-content hidden space-y-6">
             <div class="border-b border-slate-800 pb-5">
-                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Team Performance & Individual Development Plan (IDP)</h2>
-                <p class="text-slate-400 text-sm mt-1">Rep တစ်ဦးစီ၏ စွမ်းဆောင်ရည်နှင့် Skill Gap များကို ဆန်းစစ်၍ 1-on-1 IDP ဖန်တီးပါ</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight" data-i18n="repsTitle">Team Leaderboard & IDP Coaching Matrix</h2>
+                <p class="text-slate-400 text-sm mt-1" data-i18n="repsSubtitle">Monitor rep quota attainment, skill gaps, and assign gamified achievement badges.</p>
             </div>
 
             <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-5">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-white">Sales Team Competency Matrix</h3>
-                        <p class="text-xs text-slate-400">Prospecting, Pitching, Objection Handling & Closing စွမ်းရည်များကို အဆင့်သတ်မှတ်ပါ</p>
-                    </div>
+                    <h3 class="text-lg font-bold text-white" data-i18n="repsMatrixHeader">Sales Team Leaderboard</h3>
                     <button id="addRepBtn" class="px-3.5 py-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-2">
                         <i class="fa-solid fa-user-plus"></i>
-                        <span>Add Team Member</span>
+                        <span data-i18n="addRep">Add Team Member</span>
                     </button>
                 </div>
 
@@ -346,14 +656,12 @@
                     <table class="w-full text-left text-xs border-collapse">
                         <thead>
                             <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider">
-                                <th class="p-3">Rep Name</th>
-                                <th class="p-3">Prospecting</th>
-                                <th class="p-3">Discovery</th>
-                                <th class="p-3">Objections</th>
-                                <th class="p-3">Closing</th>
-                                <th class="p-3">Win Rate %</th>
-                                <th class="p-3">Status / Diagnosis</th>
-                                <th class="p-3 text-right">Actions</th>
+                                <th class="p-3" data-i18n="thRep">Rep Name</th>
+                                <th class="p-3" data-i18n="thQuota">Target Quota</th>
+                                <th class="p-3" data-i18n="thClosed">Closed Revenue</th>
+                                <th class="p-3" data-i18n="thAttain">Attainment %</th>
+                                <th class="p-3" data-i18n="thBadge">Badges</th>
+                                <th class="p-3 text-right" data-i18n="thActions">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="repsTableBody" class="divide-y divide-slate-800/60">
@@ -362,159 +670,208 @@
                     </table>
                 </div>
             </div>
-
-            <!-- Individual Development Plan (IDP) Modal / Card -->
-            <div id="idpSection" class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
-                <h3 class="text-base font-bold text-white flex items-center">
-                    <i class="fa-solid fa-id-card text-accent-400 mr-2"></i>
-                    Individual Development Plan (IDP) Generator
-                </h3>
-                <div id="idpContent" class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-300 leading-relaxed">
-                    ဇယားထဲမှ Rep တစ်ဦး၏ 'Generate IDP' ခလုတ်ကို နှိပ်၍ သီးသန့် လေ့ကျင့်ရေးအစီအစဉ် ထုတ်ယူပါ...
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== TAB 4: ROUTINE TRACKER ==================== -->
-        <section id="tab-routine-tracker" class="tab-content hidden space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-                <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Daily & Weekly Execution Routine</h2>
-                    <p class="text-slate-400 text-sm mt-1">အရောင်းမန်နေဂျာတစ်ဦး၏ နေ့စဉ်နှင့် အပတ်စဉ် မဖြစ်မနေ လုပ်ဆောင်ရမည့် တာဝန်များ</p>
-                </div>
-                <button id="resetRoutineBtn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg transition">
-                    <i class="fa-solid fa-arrow-rotate-left mr-1"></i> Reset Checkboxes
-                </button>
-            </div>
-
-            <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between gap-4">
-                <div class="space-y-1">
-                    <div class="text-xs text-slate-400">Total Completion Score</div>
-                    <div id="routineProgressText" class="text-xl font-bold text-brand-400">0% Completed</div>
-                </div>
-                <div class="w-1/2 bg-slate-950 rounded-full h-3 border border-slate-800 overflow-hidden">
-                    <div id="routineProgressBar" class="bg-brand-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
-                    <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center">
-                        <i class="fa-solid fa-sun text-amber-400 mr-2"></i> Daily Routines (နေ့စဉ် တာဝန်များ)
-                    </h3>
-                    <div class="space-y-2.5" id="dailyRoutineList"></div>
-                </div>
-
-                <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
-                    <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center">
-                        <i class="fa-solid fa-calendar-week text-accent-400 mr-2"></i> Weekly Routines (အပတ်စဉ် တာဝန်များ)
-                    </h3>
-                    <div class="space-y-2.5" id="weeklyRoutineList"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== TAB 5: OBJECTION PLAYBOOK ==================== -->
-        <section id="tab-objection-playbook" class="tab-content hidden space-y-6">
-            <div class="border-b border-slate-800 pb-5">
-                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Sales Objection Battlecard Engine</h2>
-                <p class="text-slate-400 text-sm mt-1">ဝယ်သူများ၏ ကန့်ကွက်ချက်များအား ပရိုဖက်ရှင်နယ် တုံ့ပြန်ရန် ရေပန်းစားသော စကေးများ</p>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-3">
-                <div class="relative flex-1">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-sm"></i>
-                    <input type="text" id="objectionSearch" placeholder="Search by objection, keyword, or Burmese translation..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white outline-none focus:border-brand-500">
-                </div>
-                <div class="flex space-x-2 overflow-x-auto" id="objectionCategoryFilters">
-                    <button data-cat="all" class="obj-filter-btn active px-3.5 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold whitespace-nowrap">All Categories</button>
-                    <button data-cat="Price" class="obj-filter-btn px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Price / Budget</button>
-                    <button data-cat="Authority" class="obj-filter-btn px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Authority</button>
-                    <button data-cat="Competition" class="obj-filter-btn px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Competition</button>
-                    <button data-cat="Timing" class="obj-filter-btn px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Timing / Need</button>
-                </div>
-            </div>
-
-            <div id="objectionsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <!-- Dynamic Content -->
-            </div>
-        </section>
-
-        <!-- ==================== TAB 6: STALLED DEAL RECOVERY ==================== -->
-        <section id="tab-stalled-deal" class="tab-content hidden space-y-6">
-            <div class="border-b border-slate-800 pb-5">
-                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Stalled Deal Recovery Engine</h2>
-                <p class="text-slate-400 text-sm mt-1">ကြန့်ကြာနေသော (Ghosting/Stalled) Deals များကို ပြန်လည် အသက်သွင်းရန် နည်းလမ်းများ</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:col-span-7 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
-                    <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center">
-                        <i class="fa-solid fa-stethoscope text-red-400 mr-2"></i> Deal Symptom Diagnostic
-                    </h3>
-                    <div class="space-y-3" id="diagnosticChecklist">
-                        <!-- JS Dynamic Items -->
-                    </div>
-                </div>
-
-                <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center">
-                            <i class="fa-solid fa-kit-medical text-brand-400 mr-2"></i> Diagnostic Result & Recovery Plan
-                        </h3>
-                        <div id="diagnosticResultBox" class="mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-slate-300">
-                            စစ်ဆေးချက်များ အမှန်ခြစ်ပါက အဓိက ပြဿနာနှင့် ဖြေရှင်းနည်းများကို ဖော်ပြပေးပါမည်။
-                        </div>
-                    </div>
-
-                    <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="font-bold text-slate-300">Break-up Email Strategy</span>
-                            <button onclick="copyToClipboard('breakupEmailText')" class="text-brand-400 hover:underline">Copy</button>
-                        </div>
-                        <p id="breakupEmailText" class="text-xs text-slate-400 italic bg-slate-900 p-3 rounded-lg border border-slate-800 leading-relaxed">
-                            "Hi [Name], I haven't heard back from you, so I assume your priorities have shifted. Should I close this file for now?"
-                        </p>
-                    </div>
-                </div>
-            </div>
         </section>
 
     </main>
 
     <script>
-        // ==================== STATE MANAGEMENT & STORAGE ====================
-        const STORAGE_KEY = 'sales_manager_pro_v3_state';
+        // ==================== STATE MANAGEMENT ====================
+        const STORAGE_KEY = 'sales_manager_pro_v5_state';
 
         let appState = {
             theme: 'dark',
+            lang: 'en', // 'en' or 'mm'
+            currency: 'USD', // 'USD' ($) or 'MMK' (ကျပ်)
             calc: {
                 revenue: 60000,
                 avgDeal: 3000,
                 cycleDays: 30,
-                winRate: 25,
-                leadRate: 20
+                winRate: 25
             },
-            routines: {
-                daily: [false, false, false, false, false],
-                weekly: [false, false, false, false]
-            },
+            deals: [
+                { id: 'd1', title: 'Apex Retail System', client: 'U Kyaw Swar', value: 12000, stage: 'lead', rep: 'Kyaw Kyaw', probability: 20 },
+                { id: 'd2', title: 'Logistics Fleet Tracking', client: 'Daw Thin Thin', value: 25000, stage: 'discovery', rep: 'Aung Aung', probability: 40 },
+                { id: 'd3', title: 'Enterprise ERP Upgrade', client: 'Ko Min Thu', value: 45000, stage: 'proposal', rep: 'Su Su', probability: 60 },
+                { id: 'd4', title: 'Cloud Data Migration', client: 'U Than Htun', value: 18000, stage: 'closing', rep: 'Kyaw Kyaw', probability: 80 },
+                { id: 'd5', title: 'Retail POS Software', client: 'Daw Nwe Nwe', value: 8000, stage: 'won', rep: 'Su Su', probability: 100 }
+            ],
             reps: [
-                { id: 1, name: 'Kyaw Kyaw', prospecting: 4, discovery: 3, objection: 2, closing: 3, winRate: 22 },
-                { id: 2, name: 'Aung Aung', prospecting: 2, discovery: 4, objection: 4, closing: 2, winRate: 18 },
-                { id: 3, name: 'Su Su', prospecting: 5, discovery: 4, objection: 4, closing: 4, winRate: 32 }
+                { id: 1, name: 'Su Su', quota: 50000, closed: 62000, badge: 'Quota Breaker' },
+                { id: 2, name: 'Kyaw Kyaw', quota: 40000, closed: 38000, badge: 'Closing Master' },
+                { id: 3, name: 'Aung Aung', quota: 45000, closed: 28000, badge: 'Discovery Champ' }
             ]
         };
 
-        function loadSavedState() {
+        // Translations Dictionary
+        const i18n = {
+            en: {
+                navKanban: "Pipeline Kanban Board",
+                navPitchEval: "AI Pitch Audio Evaluator",
+                navRoleplay: "Sales Roleplay Simulator",
+                navEmailGen: "Smart Email & Outreach",
+                navCommission: "Commission & Bonus Calc",
+                navAnalytics: "Velocity & Revenue Calc",
+                navCommLab: "Exec English Lab",
+                navReps: "Team Matrix & Leaderboard",
+                resetData: "Reset All Data",
+                kanbanTitle: "Interactive Sales Pipeline Kanban",
+                kanbanSubtitle: "Drag & Drop deals across stages, track probability, and monitor weighted revenue.",
+                weightedValue: "Weighted Pipeline Value",
+                addDeal: "Add New Deal",
+                colLead: "1. Lead In",
+                colDiscovery: "2. Discovery",
+                colProposal: "3. Proposal Sent",
+                colClosing: "4. Closing / Neg",
+                colWon: "5. Closed Won",
+                pitchTitle: "AI Audio Pitch Evaluator & Speech-to-Text",
+                pitchSubtitle: "Record your voice pitch, measure Speaking Speed (WPM), detect filler words, and analyze sales score in real-time.",
+                voiceRecorder: "Voice Pitch Recorder",
+                startRecording: "Start Pitch",
+                stopRecording: "Stop & Evaluate",
+                micHint: "Uses Web Speech API natively. No server or API key required.",
+                keywordsLabel: "Key Pitch Value Words to Match",
+                keywordsHint: "Comma-separated target terms to check in pitch transcript.",
+                pitchMetrics: "Speech Analytics Metrics",
+                metricSpeed: "Pacing Speed",
+                metricFillers: "Filler Words",
+                metricImpact: "Value Score",
+                transcriptTitle: "Live Audio Speech-to-Text Transcript",
+                roleplayTitle: "Interactive Sales Roleplay Simulator",
+                roleplaySubtitle: "Choose a customer persona, make interactive responses, and manage buyer sentiment dynamically.",
+                buyerSentiment: "Buyer Trust & Sentiment Level",
+                chooseResponse: "Choose Your Sales Response:",
+                emailTitle: "Smart Outreach & Follow-Up Email Generator",
+                emailSubtitle: "Generate high-converting C-Suite Cold Outreach, Follow-ups, and Re-engagement Emails instantly.",
+                outreachVariables: "Outreach Variables",
+                emailType: "Outreach Type",
+                prospectName: "Prospect Name & Title",
+                companyName: "Target Company",
+                painPoint: "Primary Pain Point / Goal",
+                offerVal: "Key Solution Offer Metric",
+                generatedScript: "Generated Email Template",
+                copyBtn: "Copy",
+                mailtoBtn: "Open in Mail",
+                audioPronunciation: "Listen to English audio pronunciation:",
+                speakBtn: "Play Speech",
+                commTitle: "Tiered Commission & Bonus Accelerator Calculator",
+                commSubtitle: "Calculate base earnings, quota achievement %, and tier accelerators automatically.",
+                payoutVariables: "Quota & Rate Inputs",
+                baseSalary: "Base Salary Amount",
+                quotaTarget: "Target Quota Revenue",
+                actualClosed: "Actual Revenue Achieved",
+                baseCommRate: "Base Commission Rate (%)",
+                acceleratorRate: "100%+ Quota Accelerator Bonus Rate (%)",
+                totalPayoutSummary: "Estimated Earnings Breakdown",
+                quotaAttained: "Quota Attainment",
+                totalPayout: "Total Projected Earnings",
+                baseSalaryLabel: "Base Salary:",
+                baseCommLabel: "Base Commission (up to 100% Target):",
+                accelBonusLabel: "Accelerator Bonus (Over 100% Target):",
+                commTip: "Setting accelerator tiers above 100% quota incentivizes top reps to overachieve monthly targets.",
+                analyticsTitle: "Sales Velocity & Funnel Engine",
+                analyticsSubtitle: "Pipeline Velocity, Target Funnel math and real-time Chart.js graphics.",
+                labTitle: "Executive Business English Phrasebook",
+                labSubtitle: "Listen to native audio pronunciation for closing, negotiation, and C-level pitching phrases.",
+                repsTitle: "Team Leaderboard & IDP Coaching Matrix",
+                repsSubtitle: "Monitor rep quota attainment, skill gaps, and assign gamified achievement badges.",
+                repsMatrixHeader: "Sales Team Leaderboard",
+                addRep: "Add Team Member",
+                thRep: "Rep Name",
+                thQuota: "Target Quota",
+                thClosed: "Closed Revenue",
+                thAttain: "Attainment %",
+                thBadge: "Badges",
+                thActions: "Actions"
+            },
+            mm: {
+                navKanban: "အရောင်း ပိုက်လိုင်း Kanban ဘုတ်",
+                navPitchEval: "AI အသံထွက် စစ်ဆေးရေးကိရိယာ",
+                navRoleplay: "အရောင်း အမေးအဖြေ Simulator",
+                navEmailGen: "Email & စာတို ဖန်တီးစနစ်",
+                navCommission: "ကော်မရှင် & ဘောနပ်စ် တွက်စက်",
+                navAnalytics: "Velocity & ရောင်းအား Analytics",
+                navCommLab: "စီးပွားရေး အင်္ဂလိပ်စာ လေ့ကျင့်ခန်း",
+                navReps: "အဖွဲ့၏ Leaderboard & Scorecard",
+                resetData: "ဒေတာအားလုံး ပြန်စမည်",
+                kanbanTitle: "အပြန်အလှန်သုံး ပိုက်လိုင်း Kanban ဘုတ်",
+                kanbanSubtitle: "Deals များကို Drag & Drop ဆွဲရွှေ့၍ အဆင့်အလိုက် မျှော်မှန်းရောင်းအားကို စိစစ်ပါ",
+                weightedValue: "ခန့်မှန်းခြေ ပိုက်လိုင်း တန်ဖိုး",
+                addDeal: "Deal အသစ်ထည့်မည်",
+                colLead: "၁။ Lead စတင်ရရှိမှု",
+                colDiscovery: "၂။ လိုအပ်ချက် လေ့လာမှု",
+                colProposal: "၃။ Proposal တင်ပြထားမှု",
+                colClosing: "၄။ စျေးနှုန်း ညှိနှိုင်းမှု",
+                colWon: "၅။ အရောင်း အောင်မြင်မှု",
+                pitchTitle: "AI အသံထွက် စစ်ဆေးရေးနှင့် စာသားပြောင်းစနစ်",
+                pitchSubtitle: "မိန့်ခွန်း အသံသွင်း၍ စကားပြောနှုန်း (WPM)၊ မလိုအပ်သော အာမေဍိတ် စကားလုံးများနှင့် ရမှတ်များ စစ်ဆေးပါ",
+                voiceRecorder: "အသံသွင်း စစ်ဆေးစက်",
+                startRecording: "အသံသွင်း စတင်မည်",
+                stopRecording: "ရပ်တန့်၍ စစ်ဆေးမည်",
+                micHint: "Browser ၏ Web Speech API ကို တိုက်ရိုက်သုံးထားပါသည်။ API Key မလိုပါ။",
+                keywordsLabel: "စစ်ဆေးလိုသည့် အဓိက သော့ချက်စကားလုံးများ",
+                keywordsHint: "ကော်မာ (,) ခြား၍ သော့ချက်စကားလုံးများ ထည့်ပါ။",
+                pitchMetrics: "အသံပိုင်းဆိုင်ရာ စစ်ဆေးချက်များ",
+                metricSpeed: "စကားပြောနှုန်း",
+                metricFillers: "အာမေဍိတ် စကားလုံးများ",
+                metricImpact: "တန်ဖိုး ရမှတ်",
+                transcriptTitle: "အသံမှ စာသားသို့ တိုက်ရိုက် ပြောင်းလဲချက်",
+                roleplayTitle: "အရောင်း အမေးအဖြေ Roleplay Simulator",
+                roleplaySubtitle: "ဝယ်သူ အမျိုးအစား ရွေးချယ်၍ အမေးအဖြေ ပြုလုပ်ပြီး ဝယ်သူ၏ ယုံကြည်မှုကို မြှင့်တင်ပါ",
+                buyerSentiment: "ဝယ်သူ၏ ယုံကြည်မှုနှင့် စိတ်ကျေနပ်မှု",
+                chooseResponse: "သင့်၏ တုံ့ပြန်မှုကို ရွေးချယ်ပါ -",
+                emailTitle: "Cold Email & Outreach Generator",
+                emailSubtitle: "လူကြီးမင်းများထံ ပေးပို့မည့် Cold Email၊ Follow-up စာတိုများကို ချက်ချင်း ထုတ်ယူပါ",
+                outreachVariables: "လိုအပ်သော အချက်အလက်များ",
+                emailType: "Outreach အမျိုးအစား",
+                prospectName: "ဝယ်သူအမည်နှင့် ရာထူး",
+                companyName: "ကုမ္ပဏီ အမည်",
+                painPoint: "အဓိက ကြုံတွေ့နေရသော ပြဿနာ",
+                offerVal: "ကမ်းလှမ်းသည့် အကျိုးကျေးဇူး",
+                generatedScript: "ထွက်ရှိလာသော စာမူ ရလဒ်",
+                copyBtn: "ကူးယူမည်",
+                mailtoBtn: "Mail ဖြင့် ပေးပို့မည်",
+                audioPronunciation: "အင်္ဂလိပ် အသံထွက်ကို နားထောင်ရန် -",
+                speakBtn: "အသံဖွင့်မည်",
+                commTitle: "Tiered ကော်မရှင် & ဘောနပ်စ် တွက်စက်",
+                commSubtitle: "Target ပြည့်မီမှု % အလိုက် ကော်မရှင်နှင့် ဘောနပ်စ်များကို တွက်ချက်ပါ",
+                payoutVariables: "Target နှင့် နှုန်းထားများ ထည့်ရန်",
+                baseSalary: "အခြေခံ လစာ",
+                quotaTarget: "သတ်မှတ် Target အရောင်း",
+                actualClosed: "လက်တွေ့ ရရှိခဲ့သော အရောင်း",
+                baseCommRate: "အခြေခံ ကော်မရှင် %",
+                acceleratorRate: "100%+ ပြည့်ပါက ထပ်ဆောင်း ဘောနပ်စ် %",
+                totalPayoutSummary: "ရရှိမည့် စုစုပေါင်း ဝင်ငွေ ခန့်မှန်းချက်",
+                quotaAttained: "Target ပြည့်မီမှု %",
+                totalPayout: "စုစုပေါင်း မျှော်မှန်း ဝင်ငွေ",
+                baseSalaryLabel: "အခြေခံ လစာ -",
+                baseCommLabel: "အခြေခံ ကော်မရှင် (100% အထိ) -",
+                accelBonusLabel: "ထပ်ဆောင်း ဘောနပ်စ် (100% အထက်) -",
+                commTip: "Target 100% ထက် ကျော်လွန်ပါက ထပ်ဆောင်း ဘောနပ်စ် ပေးခြင်းဖြင့် အရောင်းဝန်ထမ်းများ၏ စွမ်းဆောင်ရည်ကို မြှင့်တင်နိုင်ပါသည်။",
+                analyticsTitle: "Sales Velocity & Revenue Analytics Engine",
+                analyticsSubtitle: "Pipeline Velocity၊ Target Funnel တွက်ချက်မှုနှင့် Live Graphical Insights များ",
+                labTitle: "Executive Business English Phrasebook",
+                labSubtitle: "အရောင်းပိတ်ခြင်း၊ ညှိနှိုင်းခြင်းနှင့် Pitch လုပ်ရာတွင် သုံးသော အင်္ဂလိပ် စကားစုများ",
+                repsTitle: "Team Leaderboard & IDP Coaching Matrix",
+                repsSubtitle: "အရောင်းဝန်ထမ်းများ၏ Target ပြည့်မီမှုနှင့် Badges များကို စိစစ်ပါ",
+                repsMatrixHeader: "Sales Team Leaderboard",
+                addRep: "အဖွဲ့ဝင် အသစ်ထည့်မည်",
+                thRep: "အမည်",
+                thQuota: "Target အရောင်း",
+                thClosed: "ရရှိ အရောင်း",
+                thAttain: "ပြည့်မီမှု %",
+                thBadge: "Badges",
+                thActions: "လုပ်ဆောင်ချက်"
+            }
+        };
+
+        function loadState() {
             try {
                 const saved = localStorage.getItem(STORAGE_KEY);
                 if (saved) {
-                    const parsed = JSON.parse(saved);
-                    appState = { ...appState, ...parsed };
+                    appState = { ...appState, ...JSON.parse(saved) };
                 }
             } catch (e) {
-                console.error("State loading error:", e);
+                console.error("State load error:", e);
             }
         }
 
@@ -522,7 +879,7 @@
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
             } catch (e) {
-                console.error("State saving error:", e);
+                console.error("State save error:", e);
             }
         }
 
@@ -533,13 +890,21 @@
             setTimeout(() => toast.classList.add('translate-x-full'), 2500);
         }
 
+        function formatCurrency(num) {
+            const val = parseFloat(num) || 0;
+            if (appState.currency === 'MMK') {
+                return (val * 3500).toLocaleString() + ' Ks';
+            }
+            return '$' + val.toLocaleString();
+        }
+
         function copyToClipboard(elementIdOrText) {
-            let textToCopy = elementIdOrText;
+            let text = elementIdOrText;
             const el = document.getElementById(elementIdOrText);
-            if (el) textToCopy = el.innerText || el.textContent;
+            if (el) text = el.innerText || el.textContent;
 
             const textarea = document.createElement('textarea');
-            textarea.value = textToCopy;
+            textarea.value = text;
             document.body.appendChild(textarea);
             textarea.select();
             try {
@@ -564,175 +929,489 @@
             }
         }
 
-        // Theme Toggle Logic
-        function initTheme() {
-            const themeBtn = document.getElementById('themeToggleBtn');
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-
-            function applyTheme(isDark) {
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                    themeIcon.className = 'fa-solid fa-moon text-brand-400';
-                    themeText.innerText = 'Dark Mode';
-                    appState.theme = 'dark';
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    themeIcon.className = 'fa-solid fa-sun text-amber-400';
-                    themeText.innerText = 'Light Mode';
-                    appState.theme = 'light';
+        // Apply Language Dictionary
+        function applyLanguage() {
+            const langDict = i18n[appState.lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (langDict[key]) {
+                    el.innerText = langDict[key];
                 }
-                saveState();
+            });
+            document.getElementById('langText').innerText = appState.lang === 'en' ? 'EN / မြန်မာ' : 'မြန်မာ / EN';
+            saveState();
+        }
+
+        // ==================== KANBAN MODULE ====================
+        function initKanban() {
+            const stages = ['lead', 'discovery', 'proposal', 'closing', 'won'];
+
+            function renderKanban() {
+                stages.forEach(st => {
+                    const colEl = document.getElementById(`col-${st}`);
+                    const dealsInStage = appState.deals.filter(d => d.stage === st);
+                    
+                    document.getElementById(`count-${st}`).innerText = dealsInStage.length;
+                    
+                    const totalVal = dealsInStage.reduce((acc, curr) => acc + curr.value, 0);
+                    document.getElementById(`total-${st}`).innerText = formatCurrency(totalVal);
+
+                    colEl.innerHTML = dealsInStage.map(d => `
+                        <div draggable="true" data-id="${d.id}" class="kanban-card p-3.5 bg-slate-950 border border-slate-800 rounded-xl space-y-2 cursor-grab active:cursor-grabbing hover:border-slate-700 transition">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold text-xs text-white">${d.title}</h4>
+                                <button onclick="deleteDeal('${d.id}')" class="text-slate-600 hover:text-red-400 text-xs"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <div class="text-[11px] text-slate-400">${d.client} • <span class="text-brand-400 font-semibold">${d.rep}</span></div>
+                            <div class="flex justify-between items-center pt-2 border-t border-slate-900 text-xs">
+                                <span class="font-extrabold text-brand-400">${formatCurrency(d.value)}</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">${d.probability}% Prob</span>
+                            </div>
+                        </div>
+                    `).join('');
+                });
+
+                // Calculate total weighted pipeline value
+                const weightedTotal = appState.deals.reduce((sum, d) => sum + (d.value * (d.probability / 100)), 0);
+                document.getElementById('weightedValueDisplay').innerText = formatCurrency(weightedTotal);
+
+                attachDragListeners();
             }
 
-            themeBtn.addEventListener('click', () => {
-                const isDark = !document.documentElement.classList.contains('dark');
-                applyTheme(isDark);
-            });
+            function attachDragListeners() {
+                const cards = document.querySelectorAll('.kanban-card');
+                const cols = document.querySelectorAll('.kanban-col');
 
-            applyTheme(appState.theme === 'dark');
-        }
-
-        // JSON Import / Export State
-        function initExportImport() {
-            document.getElementById('exportStateBtn').addEventListener('click', () => {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-                const downloadAnchor = document.createElement('a');
-                downloadAnchor.setAttribute("href", dataStr);
-                downloadAnchor.setAttribute("download", `sales_manager_dashboard_backup_${new Date().toISOString().slice(0,10)}.json`);
-                document.body.appendChild(downloadAnchor);
-                downloadAnchor.click();
-                downloadAnchor.remove();
-                showToast('State exported as JSON file');
-            });
-
-            const importInput = document.getElementById('importFileInput');
-            document.getElementById('importStateBtn').addEventListener('click', () => importInput.click());
-
-            importInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (evt) => {
-                    try {
-                        const parsed = JSON.parse(evt.target.result);
-                        appState = { ...appState, ...parsed };
-                        saveState();
-                        location.reload();
-                    } catch (err) {
-                        showToast('Invalid JSON Backup file');
-                    }
-                };
-                reader.readAsText(file);
-            });
-        }
-
-        // Navigation Logic
-        function initNavigation() {
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            navButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const targetTab = btn.getAttribute('data-tab');
-
-                    navButtons.forEach(b => {
-                        b.classList.remove('bg-brand-600/20', 'text-brand-400', 'border', 'border-brand-500/30');
-                        b.classList.add('text-slate-400', 'hover:bg-slate-800/60', 'hover:text-slate-200');
+                cards.forEach(card => {
+                    card.addEventListener('dragstart', (e) => {
+                        e.dataTransfer.setData('text/plain', card.getAttribute('data-id'));
+                        card.classList.add('dragging');
                     });
 
-                    btn.classList.remove('text-slate-400', 'hover:bg-slate-800/60', 'hover:text-slate-200');
-                    btn.classList.add('bg-brand-600/20', 'text-brand-400', 'border', 'border-brand-500/30');
+                    card.addEventListener('dragend', () => {
+                        card.classList.remove('dragging');
+                    });
+                });
 
-                    tabContents.forEach(tab => {
-                        if (tab.id === `tab-${targetTab}`) {
-                            tab.classList.remove('hidden');
-                        } else {
-                            tab.classList.add('hidden');
+                cols.forEach(col => {
+                    col.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        col.classList.add('drag-over');
+                    });
+
+                    col.addEventListener('dragleave', () => {
+                        col.classList.remove('drag-over');
+                    });
+
+                    col.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        col.classList.remove('drag-over');
+                        const dealId = e.dataTransfer.getData('text/plain');
+                        const targetStage = col.getAttribute('data-stage');
+
+                        const deal = appState.deals.find(d => d.id === dealId);
+                        if (deal) {
+                            deal.stage = targetStage;
+                            // auto adjust probability
+                            if (targetStage === 'lead') deal.probability = 20;
+                            if (targetStage === 'discovery') deal.probability = 40;
+                            if (targetStage === 'proposal') deal.probability = 60;
+                            if (targetStage === 'closing') deal.probability = 80;
+                            if (targetStage === 'won') deal.probability = 100;
+
+                            saveState();
+                            renderKanban();
+                            showToast(`Deal moved to ${targetStage.toUpperCase()}`);
                         }
                     });
+                });
+            }
 
-                    if (window.innerWidth < 768) {
-                        document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('addDealBtn').addEventListener('click', () => {
+                const title = prompt('Enter Deal Name:', 'New Enterprise Lead');
+                if (!title) return;
+                const value = parseInt(prompt('Enter Deal Value ($):', '10000')) || 5000;
+                
+                appState.deals.push({
+                    id: 'd_' + Date.now(),
+                    title,
+                    client: 'New Client Inc',
+                    value,
+                    stage: 'lead',
+                    rep: 'Su Su',
+                    probability: 20
+                });
+
+                saveState();
+                renderKanban();
+                showToast('New Deal added to Lead In stage');
+            });
+
+            window.deleteDeal = function(id) {
+                appState.deals = appState.deals.filter(d => d.id !== id);
+                saveState();
+                renderKanban();
+                showToast('Deal removed');
+            };
+
+            renderKanban();
+        }
+
+        // ==================== AI SPEECH EVALUATOR MODULE ====================
+        function initPitchEvaluator() {
+            const startBtn = document.getElementById('startMicBtn');
+            const stopBtn = document.getElementById('stopMicBtn');
+            const transcriptBox = document.getElementById('transcriptBox');
+            const statusRing = document.getElementById('recordingStatusRing');
+            const micIcon = document.getElementById('micIcon');
+            const timerEl = document.getElementById('recordingTimer');
+
+            let recognition = null;
+            let timerInterval = null;
+            let secondsElapsed = 0;
+            let fullTranscript = '';
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'en-US';
+
+                recognition.onresult = (event) => {
+                    let interim = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            fullTranscript += event.results[i][0].transcript + ' ';
+                        } else {
+                            interim += event.results[i][0].transcript;
+                        }
                     }
+                    transcriptBox.innerText = fullTranscript + interim;
+                };
+
+                recognition.onerror = (e) => {
+                    console.error("Speech Rec Error:", e);
+                    showToast("Speech recognition error or denied mic permission.");
+                };
+            }
+
+            startBtn.addEventListener('click', () => {
+                if (!recognition) {
+                    alert("Browser doesn't support native SpeechRecognition. Try Chrome or Edge.");
+                    return;
+                }
+
+                fullTranscript = '';
+                secondsElapsed = 0;
+                transcriptBox.innerText = "Listening... Speak your sales pitch clearly...";
+
+                try {
+                    recognition.start();
+                    startBtn.disabled = true;
+                    stopBtn.disabled = false;
+                    statusRing.className = "w-20 h-20 rounded-full bg-red-600/20 border-2 border-red-500 flex items-center justify-center animate-pulse";
+                    micIcon.className = "fa-solid fa-microphone text-2xl text-red-500";
+
+                    timerInterval = setInterval(() => {
+                        secondsElapsed++;
+                        const m = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                        const s = String(secondsElapsed % 60).padStart(2, '0');
+                        timerEl.innerText = `${m}:${s}`;
+                    }, 1000);
+
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                if (recognition) recognition.stop();
+                clearInterval(timerInterval);
+
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                statusRing.className = "w-20 h-20 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center";
+                micIcon.className = "fa-solid fa-microphone text-2xl text-slate-400";
+
+                evaluateTranscript(fullTranscript, secondsElapsed);
+            });
+
+            function evaluateTranscript(text, seconds) {
+                const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+                const wordCount = words.length;
+                const minutes = Math.max(seconds / 60, 0.1);
+                const wpm = Math.round(wordCount / minutes);
+
+                // Filler word check
+                const fillerMatches = text.match(/\b(um|ah|like|you know|so|actually)\b/gi) || [];
+                const fillerCount = fillerMatches.length;
+
+                // Keyword match score
+                const keywords = document.getElementById('targetKeywordsInput').value.toLowerCase().split(',').map(k => k.trim());
+                let keywordHits = 0;
+                keywords.forEach(kw => {
+                    if (kw && text.toLowerCase().includes(kw)) keywordHits++;
+                });
+
+                const keywordDensityPct = keywords.length > 0 ? Math.min(Math.round((keywordHits / keywords.length) * 100), 100) : 0;
+
+                document.getElementById('statWpm').innerText = `${wpm} WPM`;
+                document.getElementById('statFillers').innerText = fillerCount;
+                document.getElementById('statImpact').innerText = `${keywordDensityPct}%`;
+
+                const badge = document.getElementById('pitchGradeBadge');
+                if (wpm >= 120 && wpm <= 160 && fillerCount <= 2 && keywordDensityPct >= 50) {
+                    badge.innerText = "Grade: Excellent (A)";
+                    badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-brand-500/20 text-brand-400 border border-brand-500/30";
+                } else {
+                    badge.innerText = "Grade: Needs Improvement (B/C)";
+                    badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                }
+
+                showToast("Pitch Evaluation Completed!");
+            }
+        }
+
+        // ==================== ROLEPLAY MODULE ====================
+        const roleplayScenarios = {
+            price: {
+                name: "U Kyaw Swar (SMB Owner)",
+                initialTrust: 40,
+                opening: "မင်းတို့ပေးတဲ့ Software က တခြားပြိုင်ဘက်တွေထက် ၃၀% ပိုစျေးကြီးနေတယ်။ ဘာလို့ မင်းတို့ဆီက ဝယ်ရမှာလဲ။",
+                choices: [
+                    { text: "ချက်ချင်း စျေးလျှော့ပေးပြီး discount ပေးပါမည်။", trustDelta: -15, reply: "စျေးချက်ချင်းလျှော့ပေးတာကြည့်ရင် ခင်ဗျားတို့ ပထမတုန်းက စျေးပိုတောင်းထားတာပဲ။ ဂျင်းထည့်တာလား။" },
+                    { text: "အဓိက အသွင်ပြောင်းလဲပေးမယ့် ROI သက်ရောက်မှုနှင့် စရိတ်သက်သာပုံကို သာဓကဖြင့် ရှင်းပြပါမည်။", trustDelta: +20, reply: "အင်း... အဲဒီလို ရေရှည်စရိတ် သက်သာမယ်ဆိုရင်တော့ စဉ်းစားစရာပဲ။ အသေးစိတ် အစမ်းသုံးခွင့် ပေးနိုင်မလား။" },
+                    { text: "ပြိုင်ဘက်များ၏ အားနည်းချက်ကို တိုက်ရိုက် ဝေဖန်ပြောဆိုပါမည်။", trustDelta: -10, reply: "တခြားသူကို ပုပ်ခတ်ပြောတာ မကြိုက်ဘူး။ ခင်ဗျားတို့ ကုန်ပစ္စည်း အရည်အသွေးကိုပဲ ပြောပါ။" }
+                ]
+            },
+            procurement: {
+                name: "Daw Thin Thin (Procurement VP)",
+                initialTrust: 50,
+                opening: "ကျွန်မတို့ အဖွဲ့အစည်းရဲ့ SLA နဲ့ Security Standard တွေကို ၁၀၀% အာမခံနိုင်ပါသလား။",
+                choices: [
+                    { text: "ISO Security Compliance Document နှင့် 99.9% SLA အထောက်အထားများ ပေးပို့ပါမည်။", trustDelta: +25, reply: "ကောင်းပါပြီ။ Compliance အထောက်အထား ခိုင်မာရင် ပထမအဆင့် စာချုပ်ချုပ်ဆိုဖို့ သဘောတူပါတယ်။" },
+                    { text: "စိတ်မပူပါနဲ့၊ ဘာပြဿနာမှ မရှိပါဘူးဟု နှုတ်ဖြင့်သာ အာမခံပါမည်။", trustDelta: -20, reply: "အထောက်အထားမပါဘဲ ပါးစပ်နဲ့ပဲ ပြောတာကို Enterprise အဆင့်မှာ လက်မခံနိုင်ပါဘူး။" }
+                ]
+            },
+            tech: {
+                name: "Ko Min Thu (CTO)",
+                initialTrust: 45,
+                opening: "ဒီ စနစ်က ကျွန်တော်တို့ရဲ့ လက်ရှိ Legacy API တွေနဲ့ Smooth Integration ရပါ့မလား။",
+                choices: [
+                    { text: "REST API Documentation နှင့် Developer Sandbox Access တိုက်ရိုက် ပေးပါမည်။", trustDelta: +25, reply: "ဆရာကျတယ်။ Sandbox မှာ စမ်းကြည့်လိုက်မယ်။ အဆင်ပြေရင် အထက်ကို တိုက်ရိုက် Recommend လုပ်ပေးမယ်။" },
+                    { text: "မသိသေးပါဘူး၊ အရောင်းအဖွဲ့နဲ့ပဲ ပြောပါဟု ရှောင်လွှဲပါမည်။", trustDelta: -15, reply: "Technical တိတိကျကျ မဖြေနိုင်ရင် ရှေ့ဆက်ဆွေးနွေးဖို့ အချိန်မရှိပါဘူး။" }
+                ]
+            }
+        };
+
+        function initRoleplay() {
+            let currentPersonaKey = 'price';
+            let trustLevel = 40;
+
+            const chatBox = document.getElementById('roleplayChatBox');
+            const choicesBox = document.getElementById('roleplayChoices');
+            const bar = document.getElementById('sentimentBar');
+            const valDisplay = document.getElementById('sentimentValue');
+
+            function startScenario(key) {
+                currentPersonaKey = key;
+                const sc = roleplayScenarios[key];
+                trustLevel = sc.initialTrust;
+
+                updateSentimentDisplay();
+
+                chatBox.innerHTML = `
+                    <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs">
+                        <span class="font-bold text-amber-400">${sc.name}:</span> "${sc.opening}"
+                    </div>
+                `;
+
+                renderChoices(sc.choices);
+            }
+
+            function renderChoices(choices) {
+                choicesBox.innerHTML = choices.map((c, i) => `
+                    <button onclick="makeRoleplayChoice(${i})" class="p-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl text-xs text-slate-200 text-left transition font-sans">
+                        ${c.text}
+                    </button>
+                `).join('');
+            }
+
+            window.makeRoleplayChoice = function(index) {
+                const sc = roleplayScenarios[currentPersonaKey];
+                const choice = sc.choices[index];
+
+                trustLevel = Math.max(0, Math.min(100, trustLevel + choice.trustDelta));
+                updateSentimentDisplay();
+
+                chatBox.innerHTML += `
+                    <div class="p-3 bg-brand-600/10 border border-brand-500/20 rounded-xl text-xs text-right">
+                        <span class="font-bold text-brand-400">You:</span> ${choice.text}
+                    </div>
+                    <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs">
+                        <span class="font-bold text-amber-400">${sc.name}:</span> "${choice.reply}"
+                    </div>
+                `;
+
+                chatBox.scrollTop = chatBox.scrollHeight;
+                choicesBox.innerHTML = `<div class="text-xs text-slate-500 italic">Scenario turn complete. Select another persona above to continue practice.</div>`;
+            };
+
+            function updateSentimentDisplay() {
+                bar.style.width = `${trustLevel}%`;
+                valDisplay.innerText = `${trustLevel}%`;
+                if (trustLevel >= 70) bar.className = "bg-brand-500 h-full rounded-full transition-all duration-500";
+                else if (trustLevel >= 40) bar.className = "bg-amber-500 h-full rounded-full transition-all duration-500";
+                else bar.className = "bg-red-500 h-full rounded-full transition-all duration-500";
+            }
+
+            document.querySelectorAll('.persona-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.persona-btn').forEach(b => b.classList.remove('border-2', 'border-brand-500'));
+                    btn.classList.add('border-2', 'border-brand-500');
+                    startScenario(btn.getAttribute('data-persona'));
                 });
             });
 
-            document.getElementById('mobileMenuToggle').addEventListener('click', () => {
-                document.getElementById('navContainer').classList.toggle('hidden');
-            });
+            startScenario('price');
         }
 
-        // Velocity & Chart Engine
+        // ==================== EMAIL GENERATOR MODULE ====================
+        const emailTemplates = {
+            cold_exec: {
+                subject: "Executive Alignment: Driving {OFFER} for {COMPANY}",
+                body: "Dear {PROSPECT},\n\nI hope this message finds you well.\n\nI’ve been following {COMPANY}’s growth in the region. Many executive leaders we speak with highlight {PAIN} as a key friction point in hitting quarterly targets.\n\nWe specialize in helping organizations solve this, consistently achieving {OFFER}.\n\nWould you be open to a brief 15-minute introductory call next Tuesday at 10 AM to explore how this applies to {COMPANY}?\n\nBest regards,\n[Your Name]\nSales Director"
+            },
+            post_demo: {
+                subject: "Summary & Next Steps: {COMPANY} Partnership Roadmap",
+                body: "Hi {PROSPECT},\n\nThank you for the productive discovery call today.\n\nTo summarize, our primary objective for {COMPANY} is addressing {PAIN} to unlock {OFFER}.\n\nAttached is the customized implementation outline. Could we schedule a brief follow-up this Thursday to finalize terms?\n\nBest regards,\n[Your Name]"
+            },
+            stalled: {
+                subject: "Closing file for {COMPANY}?",
+                body: "Hi {PROSPECT},\n\nI haven't heard back regarding our proposal to solve {PAIN}.\n\nTypically when this happens, it means priorities have shifted. Should I close this file for now, or is achieving {OFFER} still a priority for next quarter?\n\nBest regards,\n[Your Name]"
+            },
+            linkedin: {
+                subject: "LinkedIn Connection",
+                body: "Hi {PROSPECT}, noticed your leadership at {COMPANY}. We recently helped a similar firm overcome {PAIN} and achieve {OFFER}. Would love to connect and share insights!"
+            }
+        };
+
+        function initEmailGenerator() {
+            const selectEl = document.getElementById('emailTypeSelect');
+            const prospectInput = document.getElementById('emailProspect');
+            const companyInput = document.getElementById('emailCompany');
+            const painInput = document.getElementById('emailPain');
+            const offerInput = document.getElementById('emailOffer');
+            const outputEl = document.getElementById('emailScriptOutput');
+            const mailtoLink = document.getElementById('mailtoLink');
+
+            function updateEmail() {
+                const key = selectEl.value;
+                const tmpl = emailTemplates[key] || emailTemplates.cold_exec;
+
+                let body = tmpl.body.replace(/{PROSPECT}/g, prospectInput.value)
+                                   .replace(/{COMPANY}/g, companyInput.value)
+                                   .replace(/{PAIN}/g, painInput.value)
+                                   .replace(/{OFFER}/g, offerInput.value);
+
+                let fullText = `SUBJECT: ${tmpl.subject.replace(/{COMPANY}/g, companyInput.value).replace(/{OFFER}/g, offerInput.value)}\n\n${body}`;
+
+                outputEl.innerText = fullText;
+
+                // Update mailto href
+                const subject = encodeURIComponent(tmpl.subject.replace(/{COMPANY}/g, companyInput.value));
+                const bodyEnc = encodeURIComponent(body);
+                mailtoLink.href = `mailto:?subject=${subject}&body=${bodyEnc}`;
+            }
+
+            [selectEl, prospectInput, companyInput, painInput, offerInput].forEach(el => el.addEventListener('input', updateEmail));
+            updateEmail();
+        }
+
+        // ==================== COMMISSION CALCULATOR MODULE ====================
+        function initCommissionCalc() {
+            const baseSalaryInput = document.getElementById('commBaseSalary');
+            const quotaInput = document.getElementById('commQuotaTarget');
+            const actualInput = document.getElementById('commActualSales');
+            const baseRateInput = document.getElementById('commBaseRate');
+            const accelRateInput = document.getElementById('commAccelRate');
+
+            function calculateCommission() {
+                const baseSalary = parseFloat(baseSalaryInput.value) || 0;
+                const quota = parseFloat(quotaInput.value) || 1;
+                const actual = parseFloat(actualInput.value) || 0;
+                const baseRate = parseFloat(baseRateInput.value) / 100 || 0;
+                const accelRate = parseFloat(accelRateInput.value) / 100 || 0;
+
+                const attainmentPct = Math.round((actual / quota) * 100);
+                document.getElementById('displayAttainment').innerText = `${attainmentPct}%`;
+
+                let baseCommission = 0;
+                let accelBonus = 0;
+
+                if (actual <= quota) {
+                    baseCommission = actual * baseRate;
+                    accelBonus = 0;
+                } else {
+                    baseCommission = quota * baseRate;
+                    accelBonus = (actual - quota) * accelRate;
+                }
+
+                const totalPayout = baseSalary + baseCommission + accelBonus;
+
+                document.getElementById('breakdownBase').innerText = formatCurrency(baseSalary);
+                document.getElementById('breakdownBaseComm').innerText = formatCurrency(baseCommission);
+                document.getElementById('breakdownAccel').innerText = formatCurrency(accelBonus);
+                document.getElementById('displayTotalPayout').innerText = formatCurrency(totalPayout);
+            }
+
+            [baseSalaryInput, quotaInput, actualInput, baseRateInput, accelRateInput].forEach(el => el.addEventListener('input', calculateCommission));
+            calculateCommission();
+        }
+
+        // ==================== REVENUE ANALYTICS MODULE ====================
         let funnelChartInstance = null;
 
         function initAnalyticsEngine() {
-            const revenueInput = document.getElementById('calcTargetRevenue');
-            const avgDealInput = document.getElementById('calcAvgDealSize');
+            const revInput = document.getElementById('calcTargetRevenue');
+            const dealInput = document.getElementById('calcAvgDealSize');
             const cycleInput = document.getElementById('calcCycleLength');
             const winRateInput = document.getElementById('calcWinRate');
-            const leadRateInput = document.getElementById('calcLeadRate');
 
-            // Load saved inputs
-            revenueInput.value = appState.calc.revenue;
-            avgDealInput.value = appState.calc.avgDeal;
-            cycleInput.value = appState.calc.cycleDays;
-            winRateInput.value = appState.calc.winRate;
-            leadRateInput.value = appState.calc.leadRate;
-
-            function updateVelocityCalculations() {
-                const revenue = parseFloat(revenueInput.value) || 0;
-                const avgDeal = parseFloat(avgDealInput.value) || 1;
+            function updateAnalytics() {
+                const revenue = parseFloat(revInput.value) || 0;
+                const avgDeal = parseFloat(dealInput.value) || 1;
                 const cycleDays = parseFloat(cycleInput.value) || 1;
                 const winRate = parseFloat(winRateInput.value) / 100 || 0.01;
-                const leadRate = parseFloat(leadRateInput.value) / 100 || 0.01;
-
-                appState.calc = {
-                    revenue, avgDeal, cycleDays,
-                    winRate: winRateInput.value,
-                    leadRate: leadRateInput.value
-                };
-                saveState();
 
                 document.getElementById('calcWinRateVal').innerText = winRateInput.value + '%';
-                document.getElementById('calcLeadRateVal').innerText = leadRateInput.value + '%';
 
                 const dealsNeeded = Math.ceil(revenue / avgDeal);
                 const proposalsNeeded = Math.ceil(dealsNeeded / winRate);
-                const meetingsNeeded = Math.ceil(proposalsNeeded / 0.5); // 50% meeting-to-prop
-                const leadsNeeded = Math.ceil(meetingsNeeded / leadRate);
+                const meetingsNeeded = Math.ceil(proposalsNeeded / 0.5);
+                const leadsNeeded = Math.ceil(meetingsNeeded / 0.2);
 
-                // Velocity Formula Calculation
-                const openPipelineDeals = proposalsNeeded;
-                const dailyVelocity = Math.round((openPipelineDeals * winRate * avgDeal) / cycleDays);
+                const dailyVelocity = Math.round((proposalsNeeded * winRate * avgDeal) / cycleDays);
                 const monthlyVelocity = dailyVelocity * 30;
 
-                document.getElementById('velocityDisplay').innerText = `$${dailyVelocity.toLocaleString()} / day`;
-                document.getElementById('monthlyVelocityDisplay').innerText = `~$${monthlyVelocity.toLocaleString()} / month projected`;
+                document.getElementById('velocityDisplay').innerText = `${formatCurrency(dailyVelocity)} / day`;
+                document.getElementById('monthlyVelocityDisplay').innerText = `~${formatCurrency(monthlyVelocity)} / month projected`;
+                document.getElementById('funnelTotalSummary').innerText = `${dealsNeeded} Deals Needed for ${formatCurrency(revenue)}`;
 
-                document.getElementById('statLeads').innerText = leadsNeeded.toLocaleString();
-                document.getElementById('statMeetings').innerText = meetingsNeeded.toLocaleString();
-                document.getElementById('statProposals').innerText = proposalsNeeded.toLocaleString();
-                document.getElementById('statDeals').innerText = dealsNeeded.toLocaleString();
-                document.getElementById('funnelTotalSummary').innerText = `${dealsNeeded} Deals Needed for $${revenue.toLocaleString()}`;
-
-                // Update Chart.js
-                updateFunnelChart([leadsNeeded, meetingsNeeded, proposalsNeeded, dealsNeeded]);
+                updateChart([leadsNeeded, meetingsNeeded, proposalsNeeded, dealsNeeded]);
             }
 
-            function updateFunnelChart(dataPoints) {
+            function updateChart(dataPoints) {
                 const ctx = document.getElementById('funnelChart').getContext('2d');
-                
-                if (funnelChartInstance) {
-                    funnelChartInstance.destroy();
-                }
+                if (funnelChartInstance) funnelChartInstance.destroy();
 
                 funnelChartInstance = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Total Leads', 'Meetings Booked', 'Proposals Sent', 'Closed Won Deals'],
+                        labels: ['Total Leads', 'Meetings', 'Proposals', 'Closed Won'],
                         datasets: [{
-                            label: 'Pipeline Metric Count',
                             data: dataPoints,
                             backgroundColor: ['#c084fc', '#fbbf24', '#818cf8', '#22c55e'],
                             borderRadius: 8
@@ -741,148 +1420,72 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
+                        plugins: { legend: { display: false } },
                         scales: {
-                            y: {
-                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                                ticks: { color: '#94a3b8' }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { color: '#94a3b8' }
-                            }
+                            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
                         }
                     }
                 });
             }
 
-            [revenueInput, avgDealInput, cycleInput, winRateInput, leadRateInput].forEach(el => {
-                el.addEventListener('input', updateVelocityCalculations);
-            });
-
-            updateVelocityCalculations();
+            [revInput, dealInput, cycleInput, winRateInput].forEach(el => el.addEventListener('input', updateAnalytics));
+            updateAnalytics();
         }
 
-        // Exec English Comm Lab Logic
-        const templates = {
-            csuite: {
-                subject: "Executive Alignment: Scaling {COMPANY}'s Revenue Infrastructure",
-                body: "Dear {CLIENT},\n\nI hope this message finds you well.\n\nI’ve been following {COMPANY}’s recent market expansion. Many executives we work with in your sector face challenges maintaining forecast accuracy while scaling.\n\nWe recently helped a similar enterprise achieve a {METRIC}. I would welcome 15 minutes next Tuesday to share insights on how we can drive similar outcomes for {COMPANY}.\n\nBest regards,\n[Your Name]\nSales Director"
-            },
-            followup: {
-                subject: "Next Steps & Action Items - {COMPANY} Partnership",
-                body: "Hi {CLIENT},\n\nThank you for your time during our discovery call today.\n\nAs discussed, the key objective for {COMPANY} is to realize {METRIC}. Attached is our customized proposal outlining the implementation roadmap.\n\nCould we schedule a brief 20-minute call this Thursday to address any technical questions with your team?\n\nBest regards,\n[Your Name]"
-            },
-            price_increase: {
-                subject: "Important Notice: Annual Value & Service Adjustment for {COMPANY}",
-                body: "Dear {CLIENT},\n\nThank you for being a valued partner of ours over the past year.\n\nTo ensure we continue delivering top-tier performance and innovation that yields {METRIC}, we are adjusting our service fees by 5% effective next month.\n\nWe appreciate your continued trust and look forward to accelerating your growth.\n\nWarm regards,\n[Your Name]"
-            },
-            contract_close: {
-                subject: "Finalizing Agreement - {COMPANY} & Apex Solutions",
-                body: "Dear {CLIENT},\n\nAll requested revisions have been incorporated into the final agreement for {COMPANY}.\n\nBy executing the agreement by Friday, we can lock in the current terms and guarantee onboarding to achieve {METRIC} by next quarter.\n\nPlease let me know if you need anything further to finalize.\n\nSincerely,\n[Your Name]"
-            }
-        };
-
-        const pitchScenarios = [
+        // ==================== EXEC ENGLISH LAB MODULE ====================
+        const phrasebook = [
             {
-                id: 1,
-                title: "Executive Elevator Pitch (30-Sec)",
-                phonetic: "/ɪɡˈzɛkjətɪv ˈɛləˌveɪtər pɪʧ/",
-                script: "We help growth-stage companies automate pipeline forecasting so sales managers save 5 hours weekly and increase deal close rates by 25%.",
-                myanmar: "ကျွန်တော်တို့သည် တိုးတက်နေသော ကုမ္ပဏီများ၏ အရောင်းခန့်မှန်းချက်များကို အလိုအလျောက် ပြုလုပ်ပေးပြီး မန်နေဂျာများ အချိန် ၅ နာရီ သက်သာစေကာ ရောင်းအား ၂၅% တိုးစေပါတယ်။"
+                title: "Executive Closing Pitch",
+                script: "By executing this agreement today, we can guarantee onboarding and achieve a 30% operational efficiency increase by Q4.",
+                mm: "ယနေ့ စာချုပ် ချုပ်ဆိုပါက လာမည့် Q4 တွင် လုပ်ငန်းခွင် စွမ်းဆောင်ရည် ၃၀% တိုးတက်စေရေး တိုက်ရိုက် စတင်ပေးနိုင်ပါမည်။"
             },
             {
-                id: 2,
-                title: "QBR Presentation Opening",
-                phonetic: "/kwɔːrtərli ˈbɪznəs rɪˈvjuː/",
-                script: "Good morning executive team. Today I will present our Q3 sales performance metrics, pipeline velocity gaps, and key growth drivers for Q4.",
-                myanmar: "မင်္ဂလာနံနက်ခင်းပါ လူကြီးမင်းတို့ခင်ဗျာ။ ယနေ့တွင် Q3 အရောင်းရလဒ်များ၊ ပိုက်လိုင်း အားနည်းချက်များနှင့် Q4 ရောင်းအား မြှင့်တင်ရေး အချက်များကို တင်ပြပါမည်။"
+                title: "Handling Objections on Price",
+                script: "I completely understand budget constraints. However, our customers recover their initial investment within 9 months.",
+                mm: "ဘတ်ဂျက် အခက်အခဲကို နားလည်ပါတယ်။ ဒါပေမယ့် ကျွန်တော်တို့၏ ဝယ်ယူသူများသည် ၉ လအတွင်း ရင်းနှီးမြှုပ်နှံမှုကို အကျိုးအမြတ် ပြန်ရရှိကြပါတယ်။"
             }
         ];
 
         function initCommLab() {
-            // Subtab toggle
-            const subBtns = document.querySelectorAll('.comm-sub-btn');
-            subBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    subBtns.forEach(b => {
-                        b.classList.remove('bg-brand-600', 'text-white');
-                        b.classList.add('bg-slate-900', 'text-slate-300');
-                    });
-                    btn.classList.remove('bg-slate-900', 'text-slate-300');
-                    btn.classList.add('bg-brand-600', 'text-white');
-
-                    const target = btn.getAttribute('data-subtab');
-                    document.getElementById('commSubContent-generator').classList.toggle('hidden', target !== 'generator');
-                    document.getElementById('commSubContent-pitch-scenarios').classList.toggle('hidden', target !== 'pitch-scenarios');
-                });
-            });
-
-            // Email Generator Logic
-            const selectEl = document.getElementById('emailTemplateSelect');
-            const clientInput = document.getElementById('emailClientName');
-            const compInput = document.getElementById('emailCompanyName');
-            const metricInput = document.getElementById('emailValueMetric');
-            const outputEl = document.getElementById('generatedEmailOutput');
-
-            function updateEmailOutput() {
-                const key = selectEl.value;
-                const tmpl = templates[key] || templates.csuite;
-
-                let text = `SUBJECT: ${tmpl.subject}\n\n${tmpl.body}`;
-                text = text.replace(/{CLIENT}/g, clientInput.value)
-                           .replace(/{COMPANY}/g, compInput.value)
-                           .replace(/{METRIC}/g, metricInput.value);
-
-                outputEl.innerText = text;
-            }
-
-            [selectEl, clientInput, compInput, metricInput].forEach(el => el.addEventListener('input', updateEmailOutput));
-            updateEmailOutput();
-
-            // Render Pitch Cards
-            const pitchContainer = document.getElementById('pitchScenariosContainer');
-            pitchContainer.innerHTML = pitchScenarios.map(sc => `
+            const container = document.getElementById('phrasebookContainer');
+            container.innerHTML = phrasebook.map(p => `
                 <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl space-y-3">
-                    <div class="flex justify-between items-start">
-                        <h4 class="font-bold text-white text-sm">${sc.title}</h4>
-                        <button onclick="speakText('${sc.script.replace(/'/g, "\\'")}')" class="p-1.5 bg-brand-600/20 text-brand-400 hover:text-white rounded-lg text-xs font-semibold">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-white text-xs">${p.title}</h4>
+                        <button onclick="speakText('${p.script.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-brand-600/20 text-brand-400 rounded-lg text-xs font-semibold">
                             <i class="fa-solid fa-volume-high"></i> Listen
                         </button>
                     </div>
-                    <div class="text-[11px] text-accent-400 font-mono">${sc.phonetic}</div>
-                    <p class="text-xs text-slate-200 italic leading-relaxed font-sans">"${sc.script}"</p>
-                    <p class="text-xs text-slate-400 border-t border-slate-800 pt-2"><strong>မြန်မာ:</strong> ${sc.myanmar}</p>
+                    <p class="text-xs text-slate-200 italic font-sans border-l-2 border-brand-500 pl-3">"${p.script}"</p>
+                    <p class="text-xs text-slate-400"><strong>မြန်မာ:</strong> ${p.mm}</p>
                 </div>
             `).join('');
         }
 
-        // Rep Scorecard & IDP Matrix Logic
+        // ==================== REPS MATRIX MODULE ====================
         function initRepsMatrix() {
-            const tableBody = document.getElementById('repsTableBody');
+            const tbody = document.getElementById('repsTableBody');
 
             function renderReps() {
-                tableBody.innerHTML = appState.reps.map((rep, idx) => {
-                    const avg = ((rep.prospecting + rep.discovery + rep.objection + rep.closing) / 4).toFixed(1);
+                tbody.innerHTML = appState.reps.map((rep, idx) => {
+                    const attain = Math.round((rep.closed / rep.quota) * 100);
                     return `
                         <tr class="hover:bg-slate-800/40 transition">
-                            <td class="p-3 font-semibold text-white">
-                                <input type="text" value="${rep.name}" data-idx="${idx}" class="rep-name-input bg-transparent border-b border-transparent hover:border-slate-700 focus:border-brand-500 outline-none text-white text-xs font-semibold w-24">
-                            </td>
-                            <td class="p-3">${renderSelect(idx, 'prospecting', rep.prospecting)}</td>
-                            <td class="p-3">${renderSelect(idx, 'discovery', rep.discovery)}</td>
-                            <td class="p-3">${renderSelect(idx, 'objection', rep.objection)}</td>
-                            <td class="p-3">${renderSelect(idx, 'closing', rep.closing)}</td>
-                            <td class="p-3 font-bold text-brand-400">${rep.winRate}%</td>
+                            <td class="p-3 font-semibold text-white">${rep.name}</td>
+                            <td class="p-3">${formatCurrency(rep.quota)}</td>
+                            <td class="p-3 font-bold text-brand-400">${formatCurrency(rep.closed)}</td>
                             <td class="p-3">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${avg < 3 ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-brand-500/10 text-brand-400 border border-brand-500/20'}">
-                                    Score: ${avg} / 5
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${attain >= 100 ? 'bg-brand-500/20 text-brand-400' : 'bg-amber-500/20 text-amber-400'}">
+                                    ${attain}%
                                 </span>
                             </td>
-                            <td class="p-3 text-right space-x-2">
-                                <button onclick="generateIDP(${idx})" class="text-xs text-brand-400 hover:underline">IDP</button>
+                            <td class="p-3">
+                                <span class="px-2 py-0.5 bg-accent-500/20 text-accent-300 border border-accent-500/30 rounded text-[10px] font-bold">
+                                    🏆 ${rep.badge}
+                                </span>
+                            </td>
+                            <td class="p-3 text-right">
                                 <button onclick="deleteRep(${idx})" class="text-slate-500 hover:text-red-400"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
@@ -890,29 +1493,15 @@
                 }).join('');
             }
 
-            function renderSelect(idx, key, val) {
-                return `
-                    <select data-idx="${idx}" data-key="${key}" class="rep-select bg-slate-950 border border-slate-800 rounded px-1.5 py-1 text-slate-200 outline-none text-xs">
-                        ${[1,2,3,4,5].map(n => `<option value="${n}" ${n === val ? 'selected' : ''}>${n}★</option>`).join('')}
-                    </select>
-                `;
-            }
-
-            tableBody.addEventListener('change', (e) => {
-                if (e.target.classList.contains('rep-select')) {
-                    const idx = e.target.getAttribute('data-idx');
-                    const key = e.target.getAttribute('data-key');
-                    appState.reps[idx][key] = parseInt(e.target.value);
-                    saveState();
-                    renderReps();
-                }
-            });
-
             document.getElementById('addRepBtn').addEventListener('click', () => {
+                const name = prompt('Rep Name:', 'New Rep');
+                if (!name) return;
                 appState.reps.push({
                     id: Date.now(),
-                    name: `Rep ${appState.reps.length + 1}`,
-                    prospecting: 3, discovery: 3, objection: 3, closing: 3, winRate: 20
+                    name,
+                    quota: 40000,
+                    closed: 25000,
+                    badge: 'Rising Star'
                 });
                 saveState();
                 renderReps();
@@ -924,198 +1513,83 @@
                 renderReps();
             };
 
-            window.generateIDP = function(idx) {
-                const rep = appState.reps[idx];
-                const lowestSkill = Object.keys(rep).filter(k => ['prospecting','discovery','objection','closing'].includes(k))
-                                                  .sort((a,b) => rep[a] - rep[b])[0];
-
-                document.getElementById('idpContent').innerHTML = `
-                    <div class="space-y-2">
-                        <div class="font-bold text-white text-sm">Individual Development Plan for ${rep.name}</div>
-                        <div><strong>Primary Skill Gap Focus:</strong> <span class="text-amber-400 uppercase font-bold">${lowestSkill}</span> (Score: ${rep[lowestSkill]}/5)</div>
-                        <div><strong>30-Day Action Plan:</strong></div>
-                        <ul class="list-disc list-inside space-y-1 text-slate-400">
-                            <li>Attend twice-weekly live shadowing calls focusing on ${lowestSkill}.</li>
-                            <li>Practice 3 objection handling battlecards in the Exec English Lab.</li>
-                            <li>Aim for a 5% increase in individual win rate target (${rep.winRate + 5}%).</li>
-                        </ul>
-                    </div>
-                `;
-            };
-
             renderReps();
         }
 
-        // Routine Tracker Logic
-        const dailyTasks = [
-            { id: 0, title: "Morning Sales Standup (15 mins)", desc: "အဖွဲ့၏ နေ့စဉ် Call & Pipeline Targets များ စိစစ်ခြင်း" },
-            { id: 1, title: "Pipeline & High-Value Deal Review", desc: "ပိတ်ခါနီး Hot Deals များကို အနီးကပ် ကူညီဖြေရှင်းပေးခြင်း" },
-            { id: 2, title: "Live Call Shadowing / Coaching", desc: "Rep ၁ ဦး၏ အရောင်းဖုန်းခေါ်ဆိုမှုကို နားထောင်၍ အကြံပြုချက်ပေးခြင်း" }
-        ];
+        // Navigation Handler
+        function initNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
 
-        const weeklyTasks = [
-            { id: 0, title: "Weekly 1-on-1 Coaching Session", desc: "Rep တစ်ဦးစီနှင့် Skill Gap & IDP တိုးတက်မှု ဆွေးနွေးခြင်း" },
-            { id: 1, title: "Sales Revenue Forecast Meeting", desc: "အထက်လူကြီးများထံ လစဉ် အရောင်းခန့်မှန်းချက် တင်ပြခြင်း" }
-        ];
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.getAttribute('data-tab');
 
-        function initRoutineTracker() {
-            const dailyContainer = document.getElementById('dailyRoutineList');
-            const weeklyContainer = document.getElementById('weeklyRoutineList');
+                    navButtons.forEach(b => {
+                        b.classList.remove('bg-brand-600/20', 'text-brand-400', 'border', 'border-brand-500/30');
+                        b.classList.add('text-slate-400', 'hover:bg-slate-800/60', 'hover:text-slate-200');
+                    });
 
-            function renderRoutines() {
-                dailyContainer.innerHTML = dailyTasks.map(t => `
-                    <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer">
-                        <input type="checkbox" data-type="daily" data-id="${t.id}" ${appState.routines.daily[t.id] ? 'checked' : ''} class="mt-1 accent-brand-500">
-                        <div>
-                            <span class="text-xs font-semibold text-white block ${appState.routines.daily[t.id] ? 'line-through text-slate-500' : ''}">${t.title}</span>
-                            <span class="text-[11px] text-slate-400 block">${t.desc}</span>
-                        </div>
-                    </label>
-                `).join('');
+                    btn.classList.remove('text-slate-400', 'hover:bg-slate-800/60', 'hover:text-slate-200');
+                    btn.classList.add('bg-brand-600/20', 'text-brand-400', 'border', 'border-brand-500/30');
 
-                weeklyContainer.innerHTML = weeklyTasks.map(t => `
-                    <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer">
-                        <input type="checkbox" data-type="weekly" data-id="${t.id}" ${appState.routines.weekly[t.id] ? 'checked' : ''} class="mt-1 accent-accent-500">
-                        <div>
-                            <span class="text-xs font-semibold text-white block ${appState.routines.weekly[t.id] ? 'line-through text-slate-500' : ''}">${t.title}</span>
-                            <span class="text-[11px] text-slate-400 block">${t.desc}</span>
-                        </div>
-                    </label>
-                `).join('');
-
-                updateProgress();
-            }
-
-            function updateProgress() {
-                const total = dailyTasks.length + weeklyTasks.length;
-                const checked = appState.routines.daily.filter(Boolean).length + appState.routines.weekly.filter(Boolean).length;
-                const pct = Math.round((checked / total) * 100);
-
-                document.getElementById('routineProgressText').innerText = `${pct}% Completed`;
-                document.getElementById('routineProgressBar').style.width = `${pct}%`;
-            }
-
-            document.addEventListener('change', (e) => {
-                if (e.target && e.target.matches('input[data-type]')) {
-                    const type = e.target.getAttribute('data-type');
-                    const id = parseInt(e.target.getAttribute('data-id'));
-                    appState.routines[type][id] = e.target.checked;
-                    saveState();
-                    renderRoutines();
-                }
-            });
-
-            document.getElementById('resetRoutineBtn').addEventListener('click', () => {
-                appState.routines.daily = [false, false, false];
-                appState.routines.weekly = [false, false];
-                saveState();
-                renderRoutines();
-            });
-
-            renderRoutines();
-        }
-
-        // Objection Playbook Data
-        const objectionData = [
-            {
-                id: 1, category: "Price",
-                objection: "Your price is higher than competitors.",
-                myanmarObjection: "မင်းတို့စျေးက တခြားပြိုင်ဘက်တွေထက် ပိုများနေတယ်။",
-                script: "I understand budget concerns. However, our customers save 30% more over two years due to lower maintenance costs.",
-                myanmarScript: "ဘတ်ဂျက်ကို နားလည်ပါတယ်။ ဒါပေမယ့် ကျွန်တော်တို့ရဲ့ ပြုပြင်ထိန်းသိမ်းစရိတ် သက်သာမှုကြောင့် ရေရှည်မှာ ၃၀% မက ပိုပြီး သက်သာစေပါတယ်။"
-            },
-            {
-                id: 2, category: "Authority",
-                objection: "I need to discuss this with my boss.",
-                myanmarObjection: "ဒါကို အထက်လူကြီးနဲ့ ပြန်တိုင်ပင်ရပါဦးမယ်။",
-                script: "That makes total sense. Would it be helpful if I prepared a 1-page business summary for your leadership call?",
-                myanmarScript: "သဘောတူပါတယ်။ အထက်လူကြီးတွေကို အလွယ်တကူ တင်ပြနိုင်ဖို့ ၁ စာမျက်နှာပါ အကျဉ်းချုပ် ပြင်ဆင်ပေးရမလားခင်ဗျ။"
-            }
-        ];
-
-        function initObjectionPlaybook() {
-            const container = document.getElementById('objectionsContainer');
-            const searchInput = document.getElementById('objectionSearch');
-
-            function renderObjections() {
-                const query = searchInput.value.toLowerCase();
-                const filtered = objectionData.filter(i => i.objection.toLowerCase().includes(query) || i.myanmarObjection.toLowerCase().includes(query));
-
-                container.innerHTML = filtered.map(item => `
-                    <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="px-2 py-0.5 bg-brand-500/10 text-brand-400 text-[10px] font-bold rounded-full uppercase">${item.category}</span>
-                            <button onclick="speakText('${item.script.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-brand-400"><i class="fa-solid fa-volume-high text-sm"></i></button>
-                        </div>
-                        <h4 class="font-bold text-white text-sm">"${item.objection}"</h4>
-                        <p class="text-xs text-amber-400">မြန်မာ: "${item.myanmarObjection}"</p>
-                        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-200 leading-relaxed font-sans">
-                            ${item.script}
-                        </div>
-                        <div class="flex justify-end pt-1">
-                            <button onclick="copyToClipboard('${item.script.replace(/'/g, "\\'")}')" class="text-xs text-slate-400 hover:text-brand-400"><i class="fa-regular fa-copy"></i> Copy</button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            searchInput.addEventListener('input', renderObjections);
-            renderObjections();
-        }
-
-        // Stalled Deal Recovery Logic
-        const diagnosticQuestions = [
-            { id: 'q1', text: "Decision Maker / C-Level များနှင့် တိုက်ရိုက် မဆွေးနွေးရသေးခြင်း" },
-            { id: 'q2', text: "ဝယ်ယူလိုသည့် အချိန်ဇယား မရေမရာဖြစ်နေခြင်း (No Clear Timeline)" },
-            { id: 'q3', text: "Proposal တင်ပြီးနောက် ၁ ပတ်ကျော်အထိ တုံ့ပြန်မှု မရရှိတော့ခြင်း (Ghosting)" }
-        ];
-
-        function initStalledDealRecovery() {
-            const container = document.getElementById('diagnosticChecklist');
-            container.innerHTML = diagnosticQuestions.map(q => `
-                <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-950/60 border border-slate-800 cursor-pointer">
-                    <input type="checkbox" class="diag-cb mt-1 accent-red-500">
-                    <span class="text-xs font-semibold text-slate-200 leading-relaxed">${q.text}</span>
-                </label>
-            `).join('');
-
-            document.querySelectorAll('.diag-cb').forEach(cb => {
-                cb.addEventListener('change', () => {
-                    const checkedCount = document.querySelectorAll('.diag-cb:checked').length;
-                    const resBox = document.getElementById('diagnosticResultBox');
-
-                    if (checkedCount === 0) {
-                        resBox.innerHTML = "စစ်ဆေးချက်များ အမှန်ခြစ်ပါက အဓိက ပြဿနာနှင့် ဖြေရှင်းနည်းများကို ဖော်ပြပေးပါမည်။";
-                    } else {
-                        resBox.innerHTML = `
-                            <div class="font-bold text-amber-400 text-xs">Diagnosis: Pipeline Friction Detected</div>
-                            <div class="text-slate-300 text-xs mt-1">အထက်လူကြီးပါဝင်သော Executive Call တောင်းဆိုပါ သို့မဟုတ် ဘေးဘက်မှ Break-up email စာတို ပေးပို့ပါ။</div>
-                        `;
-                    }
+                    tabContents.forEach(tab => {
+                        tab.classList.toggle('hidden', tab.id !== `tab-${target}`);
+                    });
                 });
             });
+
+            // Language Toggle
+            document.getElementById('langToggleBtn').addEventListener('click', () => {
+                appState.lang = appState.lang === 'en' ? 'mm' : 'en';
+                applyLanguage();
+            });
+
+            // Currency Toggle
+            document.getElementById('currencyToggleBtn').addEventListener('click', () => {
+                appState.currency = appState.currency === 'USD' ? 'MMK' : 'USD';
+                document.getElementById('currencyText').innerText = appState.currency === 'USD' ? 'USD ($)' : 'MMK (ကျပ်)';
+                saveState();
+                location.reload();
+            });
+
+            // CSV Export
+            document.getElementById('exportCsvBtn').addEventListener('click', () => {
+                let csv = "ID,Title,Client,Value,Stage,Rep,Probability\n";
+                appState.deals.forEach(d => {
+                    csv += `"${d.id}","${d.title}","${d.client}",${d.value},"${d.stage}","${d.rep}",${d.probability}\n`;
+                });
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.setAttribute('href', url);
+                a.setAttribute('download', `pipeline_deals_${new Date().toISOString().slice(0,10)}.csv`);
+                a.click();
+                showToast('Pipeline CSV exported');
+            });
+
+            // Reset Data
+            document.getElementById('resetDataBtn').addEventListener('click', () => {
+                if (confirm('Reset all saved local data?')) {
+                    localStorage.removeItem(STORAGE_KEY);
+                    location.reload();
+                }
+            });
         }
 
-        // Reset All Local Data
-        document.getElementById('resetDataBtn').addEventListener('click', () => {
-            if (confirm('Reset all saved local data?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
-            }
-        });
-
-        // Initialize All Functions
+        // App Initialization
         window.addEventListener('DOMContentLoaded', () => {
-            loadSavedState();
-            initTheme();
-            initExportImport();
+            loadState();
+            applyLanguage();
             initNavigation();
+            initKanban();
+            initPitchEvaluator();
+            initRoleplay();
+            initEmailGenerator();
+            initCommissionCalc();
             initAnalyticsEngine();
             initCommLab();
             initRepsMatrix();
-            initRoutineTracker();
-            initObjectionPlaybook();
-            initStalledDealRecovery();
         });
     </script>
 </body>
