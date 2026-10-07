@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="my" class="h-full bg-slate-900 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Manager Excellence & Productivity Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        accent: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Padauk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Padauk:wght@400;700&display=swap');
+        
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(51, 65, 85, 0.8);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(71, 85, 105, 1);
+        }
+    </style>
+</head>
+<body class="h-full font-sans antialiased flex flex-col md:flex-row overflow-hidden bg-slate-950 text-slate-100">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-full md:w-72 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 transition-all duration-300 z-30">
+        <div>
+            <!-- Logo / Header -->
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-gradient-to-tr from-brand-600 to-accent-600 rounded-xl shadow-lg shadow-brand-500/10">
+                        <i class="fa-solid font-bold fa-chart-line text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-base text-white tracking-wide">Sales Manager</h1>
+                        <p class="text-xs text-brand-400 font-medium">Excellence Hub (မြန်မာ)</p>
+                    </div>
+                </div>
+                <button id="mobileMenuToggle" class="md:hidden text-slate-400 hover:text-white p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-140px)]" id="navContainer">
+                <button data-tab="overview" class="nav-btn active w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left bg-brand-600/20 text-brand-400 border border-brand-500/30">
+                    <i class="fa-solid fa-compass text-lg w-6 text-center"></i>
+                    <span>Overview & English Plan</span>
+                </button>
+                
+                <button data-tab="kpi-calculator" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-calculator text-lg w-6 text-center"></i>
+                    <span>Target & KPI Calculator</span>
+                </button>
+
+                <button data-tab="routine-tracker" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-calendar-check text-lg w-6 text-center"></i>
+                    <span>Routine & Schedule</span>
+                </button>
+
+                <button data-tab="coaching-matrix" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-users-gear text-lg w-6 text-center"></i>
+                    <span>Team Coaching Matrix</span>
+                </button>
+
+                <button data-tab="objection-playbook" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-shield-halved text-lg w-6 text-center"></i>
+                    <span>Objection Playbook</span>
+                </button>
+
+                <button data-tab="stalled-deal" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-triangle-exclamation text-lg w-6 text-center"></i>
+                    <span>Stalled Deal Diagnostic</span>
+                </button>
+
+                <button data-tab="phrase-simulator" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all duration-200 text-left text-slate-400 hover:bg-slate-800/60 hover:text-slate-200">
+                    <i class="fa-solid fa-comments text-lg w-6 text-center"></i>
+                    <span>English Phrase Simulator</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- User / Quick Status Footer -->
+        <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between text-xs text-slate-400">
+            <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                <span>System Ready</span>
+            </div>
+            <button id="resetDataBtn" class="hover:text-red-400 transition" title="Reset Stored Data">
+                <i class="fa-solid fa-rotate-right"></i> Reset Data
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto bg-slate-950 p-4 md:p-8">
+        
+        <!-- Global Toast Notification -->
+        <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 bg-brand-600 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
+            <i class="fa-solid fa-circle-check text-lg"></i>
+            <span id="toastMessage" class="text-sm font-medium">Notification Message</span>
+        </div>
+
+        <!-- ==================== TAB 1: OVERVIEW & GROWTH PLAN ==================== -->
+        <section id="tab-overview" class="tab-content space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Overview & Business English Growth Plan</h2>
+                    <p class="text-slate-400 text-sm mt-1">အရောင်းမန်နေဂျာတစ်ဦး၏ ဦးဆောင်မှု စွမ်းရည်နှင့် လုပ်ငန်းသုံး အင်္ဂလိပ်စာ တိုးတက်ရေး လမ်းညွှန်</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="bg-brand-500/10 text-brand-400 border border-brand-500/30 text-xs px-3 py-1.5 rounded-full font-semibold">
+                        <i class="fa-solid fa-crown mr-1"></i> Leadership Tier
+                    </span>
+                </div>
+            </div>
+
+            <!-- Core Pillars Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                    <div class="absolute top-0 right-0 p-4 text-slate-800 group-hover:text-brand-500/20 transition">
+                        <i class="fa-solid fa-bullseye text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">1. Target Mastery</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">
+                        Target ပြည့်မီစေရန် Sales Velocity (Pipeline ရွေ့လျားမှု) နှင့် Conversion Metrics များကို အခြေခံ၍ စနစ်တကျ တွက်ချက် စီမံခန့်ခွဲခြင်း။
+                    </p>
+                    <div class="text-xs text-brand-400 font-medium">Key Focus: Revenue, Deals, Conversion %</div>
+                </div>
+
+                <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                    <div class="absolute top-0 right-0 p-4 text-slate-800 group-hover:text-accent-500/20 transition">
+                        <i class="fa-solid fa-users text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">2. Team Coaching</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">
+                        အဖွဲ့ဝင်များ၏ Skill Gaps များကို ဆန်းစစ်ပြီး 1-on-1 Framework များနှင့် ထိရောက်စွာ Coaching ပေး၍ Performance မြှင့်တင်ခြင်း။
+                    </p>
+                    <div class="text-xs text-accent-400 font-medium">Key Focus: Skill Matrix, 1-on-1s, Motivation</div>
+                </div>
+
+                <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl relative overflow-hidden group hover:border-slate-700 transition">
+                    <div class="absolute top-0 right-0 p-4 text-slate-800 group-hover:text-amber-500/20 transition">
+                        <i class="fa-solid fa-earth-americas text-6xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">3. Business English</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-4">
+                        နိုင်ငံတကာနှင့် တိုက်ရိုက် ရောင်းဝယ်ဖောက်ကားရာတွင် Confidence ရှိရှိ ပရိုဖက်ရှင်နယ် ဆက်သွယ်ပြောဆိုနိုင်ရေး စွမ်းရည် တည်ဆောက်ခြင်း။
+                    </p>
+                    <div class="text-xs text-amber-400 font-medium">Key Focus: Pitching, Objection Handling, Negotiation</div>
+                </div>
+            </div>
+
+            <!-- Business English Growth Roadmap -->
+            <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                <h3 class="text-xl font-bold text-white flex items-center">
+                    <i class="fa-solid fa-graduation-cap text-brand-400 mr-2.5"></i> 
+                    4-Week Business English & Leadership Roadmap (အပတ်စဉ် တိုးတက်ရေး စီမံချက်)
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+                    <!-- Week 1 -->
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 hover:border-brand-500/40 transition">
+                        <div class="text-xs font-bold text-brand-400 uppercase tracking-wider mb-1">Week 1</div>
+                        <h4 class="font-semibold text-white text-sm mb-2">Pipeline & Deal Positioning</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            Pipeline သုံးသပ်ချက်နှင့် Deal Status များကို English လို ရှင်းလင်းစွာ ပြောဆိုနိုင်ခြင်း။
+                        </p>
+                        <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+                            <li>Qualifying opportunities</li>
+                            <li>Forecast accuracy terms</li>
+                            <li>Value proposition pitch</li>
+                        </ul>
+                    </div>
+
+                    <!-- Week 2 -->
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 hover:border-brand-500/40 transition">
+                        <div class="text-xs font-bold text-accent-400 uppercase tracking-wider mb-1">Week 2</div>
+                        <h4 class="font-semibold text-white text-sm mb-2">Objection Handling Mastery</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            စျေးနှုန်းနှင့် ပတ်သက်သော ကန့်ကွက်ချက်များ (Price Objections) ကို ပရိုဆန်ဆန် တုံ့ပြန်ခြင်း။
+                        </p>
+                        <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+                            <li>ROI articulation</li>
+                            <li>Defending value over price</li>
+                            <li>Handling competitor comparisons</li>
+                        </ul>
+                    </div>
+
+                    <!-- Week 3 -->
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 hover:border-brand-500/40 transition">
+                        <div class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Week 3</div>
+                        <h4 class="font-semibold text-white text-sm mb-2">Executive Negotiation</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            C-Level Decision Maker များနှင့် သဘောတူညီမှု ရယူသည့် အဆင့်မြင့် ညှိနှိုင်းမှုများ။
+                        </p>
+                        <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+                            <li>Win-Win closing phrases</li>
+                            <li>Scope & discount management</li>
+                            <li>Securing timeline commitments</li>
+                        </ul>
+                    </div>
+
+                    <!-- Week 4 -->
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800/80 hover:border-brand-500/40 transition">
+                        <div class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-1">Week 4</div>
+                        <h4 class="font-semibold text-white text-sm mb-2">Team Coaching & Reviews</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                            အဖွဲ့ဝင်များအား constructive feedback ပေးခြင်းနှင့် Performance Review ပြုလုပ်ခြင်း။
+                        </p>
+                        <ul class="text-[11px] text-slate-300 space-y-1 list-disc list-inside">
+                            <li>Constructive critique framing</li>
+                            <li>Goal setting (SMART framework)</li>
+                            <li>Motivation & recognition</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: TARGET & KPI CALCULATOR ==================== -->
+        <section id="tab-kpi-calculator" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Target & KPI Calculator</h2>
+                <p class="text-slate-400 text-sm mt-1">အပတ်စဉ်/လစဉ် ရောင်းအား Target မှ ရရှိရန် လိုအပ်သော Activities များကို Dynamic တွက်ချက်ပါ</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Inputs Panel -->
+                <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-5">
+                    <h3 class="text-lg font-bold text-white flex items-center border-b border-slate-800 pb-3">
+                        <i class="fa-solid fa-sliders text-brand-400 mr-2"></i> Input Target Metrics
+                    </h3>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Target Revenue ($)</label>
+                            <input type="number" id="calcTargetRevenue" value="50000" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1.5">Average Deal Size ($)</label>
+                            <input type="number" id="calcAvgDealSize" value="2500" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-semibold focus:border-brand-500 focus:ring-1 focus:ring-brand-500 outline-none transition">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-medium text-slate-300 mb-1.5">
+                                <span>Win Rate %</span>
+                                <span id="calcWinRateVal" class="text-brand-400 font-bold">20%</span>
+                            </div>
+                            <input type="range" id="calcWinRate" min="5" max="80" value="20" class="w-full accent-brand-500 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-medium text-slate-300 mb-1.5">
+                                <span>Meeting to Deal %</span>
+                                <span id="calcMeetingRateVal" class="text-brand-400 font-bold">40%</span>
+                            </div>
+                            <input type="range" id="calcMeetingRate" min="10" max="90" value="40" class="w-full accent-brand-500 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-medium text-slate-300 mb-1.5">
+                                <span>Lead to Meeting %</span>
+                                <span id="calcLeadRateVal" class="text-brand-400 font-bold">25%</span>
+                            </div>
+                            <input type="range" id="calcLeadRate" min="5" max="60" value="25" class="w-full accent-brand-500 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Outputs Panel -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Key Result Cards -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
+                            <div class="text-slate-400 text-xs font-medium mb-1">Deals Needed</div>
+                            <div id="resDealsNeeded" class="text-2xl font-bold text-white">20</div>
+                            <div class="text-[10px] text-brand-400 mt-1">Closed Won</div>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
+                            <div class="text-slate-400 text-xs font-medium mb-1">Qualified Opps</div>
+                            <div id="resOppsNeeded" class="text-2xl font-bold text-accent-400">100</div>
+                            <div class="text-[10px] text-slate-500 mt-1">Active Pipeline</div>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
+                            <div class="text-slate-400 text-xs font-medium mb-1">Meetings Needed</div>
+                            <div id="resMeetingsNeeded" class="text-2xl font-bold text-amber-400">250</div>
+                            <div class="text-[10px] text-slate-500 mt-1">Demos / Discovery</div>
+                        </div>
+
+                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl text-center">
+                            <div class="text-slate-400 text-xs font-medium mb-1">Leads Needed</div>
+                            <div id="resLeadsNeeded" class="text-2xl font-bold text-purple-400">1000</div>
+                            <div class="text-[10px] text-slate-500 mt-1">Prospect Inquiries</div>
+                        </div>
+                    </div>
+
+                    <!-- Sales Funnel Visualization -->
+                    <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                        <h3 class="text-base font-bold text-white">Calculated Pipeline Funnel (လိုအပ်သော အရေအတွက်)</h3>
+                        <div class="space-y-3">
+                            <!-- Step 1 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs text-slate-300">
+                                    <span>1. Total Leads Required</span>
+                                    <span id="funnelLeadsText" class="font-semibold text-purple-400">1,000</span>
+                                </div>
+                                <div class="w-full bg-slate-950 rounded-full h-3 overflow-hidden border border-slate-800">
+                                    <div class="bg-purple-500 h-full rounded-full transition-all duration-500" style="width: 100%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs text-slate-300">
+                                    <span>2. Meetings Booked</span>
+                                    <span id="funnelMeetingsText" class="font-semibold text-amber-400">250</span>
+                                </div>
+                                <div class="w-full bg-slate-950 rounded-full h-3 overflow-hidden border border-slate-800">
+                                    <div id="barMeetings" class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 25%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs text-slate-300">
+                                    <span>3. Qualified Proposals Sent</span>
+                                    <span id="funnelOppsText" class="font-semibold text-accent-400">100</span>
+                                </div>
+                                <div class="w-full bg-slate-950 rounded-full h-3 overflow-hidden border border-slate-800">
+                                    <div id="barOpps" class="bg-accent-500 h-full rounded-full transition-all duration-500" style="width: 10%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4 -->
+                            <div class="space-y-1">
+                                <div class="flex justify-between text-xs text-slate-300">
+                                    <span>4. Closed Won Deals</span>
+                                    <span id="funnelDealsText" class="font-semibold text-brand-400">20</span>
+                                </div>
+                                <div class="w-full bg-slate-950 rounded-full h-3 overflow-hidden border border-slate-800">
+                                    <div id="barDeals" class="bg-brand-500 h-full rounded-full transition-all duration-500" style="width: 2%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-400 leading-relaxed">
+                            <i class="fa-solid fa-circle-info text-brand-400 mr-1.5"></i>
+                            <strong>Manager Tip:</strong> ဤတွက်ချက်မှုအရ Deals <span id="tipDealsCount" class="text-white font-semibold">20</span> ခု ရရှိရန်အတွက် တစ်ရက်လျှင် ပျမ်းမျှ Lead <span id="tipDailyLeads" class="text-white font-semibold">45</span> ခုခန့် Follow-up ပြုလုပ်ရန် လိုအပ်ပါသည်။
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: DAILY & WEEKLY ROUTINE TRACKER ==================== -->
+        <section id="tab-routine-tracker" class="tab-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Daily & Weekly Routine Tracker</h2>
+                    <p class="text-slate-400 text-sm mt-1">အရောင်းမန်နေဂျာတစ်ဦး၏ နေ့စဉ်နှင့် အပတ်စဉ် မဖြစ်မနေ လုပ်ဆောင်ရမည့် လုပ်ငန်းစဉ်များ</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="resetRoutineBtn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg transition">
+                        <i class="fa-solid fa-arrow-rotate-left mr-1"></i> Checkbox များ ပြန်စမည်
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Header -->
+            <div class="p-5 bg-gradient-to-r from-slate-900 to-slate-900/90 border border-slate-800 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="p-3 bg-brand-500/10 rounded-xl border border-brand-500/20 text-brand-400">
+                        <i class="fa-solid fa-list-check text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-base">Routine Execution Progress</h3>
+                        <p class="text-xs text-slate-400">နေ့စဉ် / အပတ်စဉ် တာဝန်များ ပြီးစီးမှု ရာခိုင်နှုန်း</p>
+                    </div>
+                </div>
+                <div class="w-full md:w-64 space-y-1.5">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="text-slate-300">Overall Progress</span>
+                        <span id="routineProgressText" class="text-brand-400">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-950 rounded-full h-2.5 border border-slate-800 overflow-hidden">
+                        <div id="routineProgressBar" class="bg-brand-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Daily Routines -->
+                <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center border-b border-slate-800 pb-3">
+                        <i class="fa-solid fa-sun text-amber-400 mr-2.5"></i> 
+                        Daily Tasks (နေ့စဉ် လုပ်ငန်းစဉ်များ)
+                    </h3>
+
+                    <div class="space-y-2.5" id="dailyRoutineList">
+                        <!-- Items rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- Weekly Routines -->
+                <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center border-b border-slate-800 pb-3">
+                        <i class="fa-solid fa-calendar-week text-accent-400 mr-2.5"></i> 
+                        Weekly Tasks (အပတ်စဉ် လုပ်ငန်းစဉ်များ)
+                    </h3>
+
+                    <div class="space-y-2.5" id="weeklyRoutineList">
+                        <!-- Items rendered via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: TEAM LEADERSHIP & COACHING MATRIX ==================== -->
+        <section id="tab-coaching-matrix" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Team Leadership & Coaching Matrix</h2>
+                <p class="text-slate-400 text-sm mt-1">အဖွဲ့ဝင် Rep များ၏ Skill Gaps များကို ဆန်းစစ်ခြင်းနှင့် 1-on-1 Coaching နမူနာများ</p>
+            </div>
+
+            <!-- Reps Skill Assessment Tool -->
+            <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-5">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Sales Rep Skill Gap Assessor</h3>
+                        <p class="text-xs text-slate-400">အဖွဲ့ဝင်တစ်ဦးစီ၏ ကျွမ်းကျင်မှုအဆင့်ကို 1 မှ 5 အထိ သတ်မှတ်၍ Coaching လိုအပ်ချက်ကို ဆန်းစစ်ပါ</p>
+                    </div>
+                    <button id="addRepBtn" class="px-3.5 py-2 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-xl transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Rep (အဖွဲ့ဝင်သစ်ထည့်မည်)</span>
+                    </button>
+                </div>
+
+                <!-- Reps Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider">
+                                <th class="p-3">Rep Name</th>
+                                <th class="p-3">Prospecting</th>
+                                <th class="p-3">Discovery / Pitch</th>
+                                <th class="p-3">Objection Handling</th>
+                                <th class="p-3">Closing Ability</th>
+                                <th class="p-3">Avg Rating</th>
+                                <th class="p-3">Action Required</th>
+                                <th class="p-3 text-right">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="repsTableBody" class="divide-y divide-slate-800/60">
+                            <!-- JS Dynamic Content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 1-on-1 Coaching Template Guide -->
+            <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-comments text-accent-400 mr-2.5"></i>
+                    1-on-1 Meeting Agenda Template (1-on-1 ဆွေးနွေးပွဲ လမ်းညွှန်)
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                        <div class="text-xs font-bold text-brand-400 mb-1">1. Wins & Highlights (10 Mins)</div>
+                        <p class="text-xs text-slate-300 mb-2">ပြီးခဲ့သော သတင်းပတ်အတွင်း အောင်မြင်ခဲ့သည့် ကိစ္စများ နှင့် အားသာချက်များအား ချီးကျူးဂုဏ်ပြုခြင်း။</p>
+                        <em class="text-[11px] text-slate-500 block">"What went really well for you this week?"</em>
+                    </div>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                        <div class="text-xs font-bold text-amber-400 mb-1">2. Pipeline & Roadblocks (15 Mins)</div>
+                        <p class="text-xs text-slate-300 mb-2">ကြုံတွေ့နေရသော အခက်အခဲများ၊ စိတ်ဓာတ်ကျစရာများနှင့် ရပ်တန့်နေသော Deals များကို စိစစ်ခြင်း။</p>
+                        <em class="text-[11px] text-slate-500 block">"Which deal is currently stuck and how can I support?"</em>
+                    </div>
+
+                    <div class="p-4 bg-slate-950 rounded-xl border border-slate-800">
+                        <div class="text-xs font-bold text-accent-400 mb-1">3. Actionable Commitment (10 Mins)</div>
+                        <p class="text-xs text-slate-300 mb-2">နောက်တစ်ပတ်အတွက် အဓိက သတိထား လုပ်ဆောင်ရမည့် Skill / Goal ကို အတည်ပြုခြင်း။</p>
+                        <em class="text-[11px] text-slate-500 block">"What is the single biggest goal for next week?"</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: SALES OBJECTION PLAYBOOK ==================== -->
+        <section id="tab-objection-playbook" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Sales Objection Handling Playbook</h2>
+                <p class="text-slate-400 text-sm mt-1">ဝယ်သူများ၏ ငြင်းဆိုချက် ကန့်ကွက်ချက်များအား ပရိုဖက်ရှင်နယ် တုံ့ပြန်ဖြေရှင်းနည်းများ</p>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-sm"></i>
+                    <input type="text" id="objectionSearch" placeholder="Search by objection, keyword, or Burmese translation..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 focus:border-brand-500 outline-none transition">
+                </div>
+                <div class="flex space-x-2 overflow-x-auto pb-1 sm:pb-0" id="objectionCategoryFilters">
+                    <button data-cat="all" class="obj-filter-btn active px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold whitespace-nowrap">All Categories</button>
+                    <button data-cat="Price" class="obj-filter-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Price / Budget</button>
+                    <button data-cat="Authority" class="obj-filter-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Authority</button>
+                    <button data-cat="Competition" class="obj-filter-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Competition</button>
+                    <button data-cat="Timing" class="obj-filter-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Timing / Need</button>
+                </div>
+            </div>
+
+            <!-- Objections Grid Container -->
+            <div id="objectionsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- JS Populated Cards -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 6: STALLED DEAL DIAGNOSTIC TOOL ==================== -->
+        <section id="tab-stalled-deal" class="tab-content hidden space-y-6">
+            <div class="border-b border-slate-800 pb-5">
+                <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Stalled Deal Diagnostic Tool</h2>
+                <p class="text-slate-400 text-sm mt-1">အချိန်ကြာမြင့်စွာ ကြန့်ကြာနေသော (Ghosting/Stalled) Deals များကို ပြန်လည် အသက်သွင်းရန် စစ်ဆေးရေးကိရိယာ</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Checklist -->
+                <div class="lg:col-span-7 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+                    <h3 class="text-lg font-bold text-white flex items-center border-b border-slate-800 pb-3">
+                        <i class="fa-solid fa-stethoscope text-red-400 mr-2.5"></i> Deal Health Check Diagnostic
+                    </h3>
+                    <p class="text-xs text-slate-400">ကျေးဇူးပြု၍ ကြန့်ကြာနေသော Deal နှင့် ကိုက်ညီသည့် အချက်များကို Check လုပ်ပါ:</p>
+
+                    <div class="space-y-3" id="diagnosticChecklist">
+                        <!-- JS items -->
+                    </div>
+                </div>
+
+                <!-- Diagnostic Outcome & Remedies -->
+                <div class="lg:col-span-5 p-6 bg-slate-900 border border-slate-800 rounded-2xl space-y-5 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-white border-b border-slate-800 pb-3 flex items-center">
+                            <i class="fa-solid fa-kit-medical text-brand-400 mr-2.5"></i> 
+                            Diagnostic Result & Remedy
+                        </h3>
+
+                        <div id="diagnosticResultBox" class="mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                            <div class="flex items-center space-x-2 text-amber-400 font-semibold text-sm">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span id="diagStatusTitle">Select items to diagnose deal</span>
+                            </div>
+                            <p id="diagStatusDesc" class="text-xs text-slate-400 leading-relaxed">
+                                ဘေးဘက်မှ စစ်ဆေးချက်များ အမှန်ခြစ်ပါက အဓိက ပြဿနာအရင်းအမြစ်နှင့် ဖြေရှင်းရန် နည်းလမ်းများကို ဖော်ပြပေးပါမည်။
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Recommended Email/Message Template -->
+                    <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-300">Break-up Email Template</span>
+                            <button onclick="copyToClipboard('breakupEmailText')" class="text-brand-400 hover:underline flex items-center space-x-1">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <p id="breakupEmailText" class="text-xs text-slate-400 italic bg-slate-900 p-3 rounded-lg border border-slate-800/80 leading-relaxed">
+                            "Hi [Name], I haven't heard back from you, so I assume your priorities have shifted or this project is on hold. Should I close this file for now?"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 7: ENGLISH PHRASE SIMULATOR ==================== -->
+        <section id="tab-phrase-simulator" class="tab-content hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Sales Pitch & English Phrase Simulator</h2>
+                    <p class="text-slate-400 text-sm mt-1">လုပ်ငန်းသုံး အင်္ဂလိပ်စာ စကားပြောများနှင့် Pitching သံစဉ်များကို စေ့စပ်စွာ လေ့ကျင့်ပါ</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs text-slate-400"><i class="fa-solid fa-volume-high text-brand-400"></i> Audio Enabled</span>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="flex space-x-2 overflow-x-auto pb-2" id="phraseCategoryNav">
+                <button data-phrase-cat="all" class="phrase-cat-btn active px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold whitespace-nowrap">All Phrases</button>
+                <button data-phrase-cat="opening" class="phrase-cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Opening & Discovery</button>
+                <button data-phrase-cat="pitching" class="phrase-cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Value Pitching</button>
+                <button data-phrase-cat="closing" class="phrase-cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Closing & Next Steps</button>
+                <button data-phrase-cat="coaching" class="phrase-cat-btn px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold whitespace-nowrap border border-slate-800">Team Coaching</button>
+            </div>
+
+            <!-- Flashcards / List Container -->
+            <div id="phrasesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- JS populated -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Application Logic Javascript -->
+    <script>
+        // ==================== STATE MANAGEMENT & STORAGE ====================
+        const STORAGE_KEY = 'sales_manager_dashboard_data_v1';
+
+        let appState = {
+            calc: {
+                revenue: 50000,
+                avgDeal: 2500,
+                winRate: 20,
+                meetingRate: 40,
+                leadRate: 25
+            },
+            routines: {
+                daily: [false, false, false, false, false],
+                weekly: [false, false, false, false]
+            },
+            reps: [
+                { name: 'Kyaw Kyaw', prospecting: 4, discovery: 3, objection: 2, closing: 3 },
+                { name: 'Aung Aung', prospecting: 2, discovery: 4, objection: 4, closing: 2 },
+                { name: 'Su Su', prospecting: 5, discovery: 4, objection: 3, closing: 4 }
+            ]
+        };
+
+        // Load persisted state
+        function loadSavedState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    appState = { ...appState, ...parsed };
+                }
+            } catch (e) {
+                console.error("Failed to load saved state", e);
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            } catch (e) {
+                console.error("Failed to save state", e);
+            }
+        }
+
+        // Helper toast notification
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            toastMsg.innerText = msg;
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 2500);
+        }
+
+        // Helper clipboard fallback safely for iFrames
+        function copyToClipboard(elementIdOrText) {
+            let textToCopy = elementIdOrText;
+            const el = document.getElementById(elementIdOrText);
+            if (el) textToCopy = el.innerText || el.textContent;
+
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Copied to clipboard!');
+            } catch (err) {
+                showToast('Failed to copy');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Web Speech API Voice Synthesis
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop current speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9; // Slightly slower for clarity
+                window.speechSynthesis.speak(utterance);
+                showToast('Playing audio preview...');
+            } else {
+                showToast('Speech synthesis not supported in this browser.');
+            }
+        }
+
+        // ==================== TAB NAVIGATION ====================
+        function initNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetTab = btn.getAttribute('data-tab');
+
+                    // Reset buttons
+                    navButtons.forEach(b => {
+                        b.classList.remove('bg-brand-600/20', 'text-brand-400', 'border', 'border-brand-500/30');
+                        b.classList.add('text-slate-400', 'hover:bg-slate-800/60', 'hover:text-slate-200');
+                    });
+
+                    // Set active button
+                    btn.classList.remove('text-slate-400', 'hover:bg-slate-800/60', 'hover:text-slate-200');
+                    btn.classList.add('bg-brand-600/20', 'text-brand-400', 'border', 'border-brand-500/30');
+
+                    // Hide/Show tabs
+                    tabContents.forEach(tab => {
+                        if (tab.id === `tab-${targetTab}`) {
+                            tab.classList.remove('hidden');
+                        } else {
+                            tab.classList.add('hidden');
+                        }
+                    });
+
+                    // On mobile, close sidebar after pick
+                    if (window.innerWidth < 768) {
+                        document.getElementById('sidebar').classList.add('hidden');
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuToggle');
+            mobileMenuBtn.addEventListener('click', () => {
+                const navContainer = document.getElementById('navContainer');
+                navContainer.classList.toggle('hidden');
+            });
+        }
+
+        // ==================== TAB 2: KPI CALCULATOR LOGIC ====================
+        function initCalculator() {
+            const revenueInput = document.getElementById('calcTargetRevenue');
+            const avgDealInput = document.getElementById('calcAvgDealSize');
+            const winRateInput = document.getElementById('calcWinRate');
+            const meetingRateInput = document.getElementById('calcMeetingRate');
+            const leadRateInput = document.getElementById('calcLeadRate');
+
+            // Set initial inputs from state
+            revenueInput.value = appState.calc.revenue;
+            avgDealInput.value = appState.calc.avgDeal;
+            winRateInput.value = appState.calc.winRate;
+            meetingRateInput.value = appState.calc.meetingRate;
+            leadRateInput.value = appState.calc.leadRate;
+
+            function updateCalculations() {
+                const revenue = parseFloat(revenueInput.value) || 0;
+                const avgDeal = parseFloat(avgDealInput.value) || 1;
+                const winRate = parseFloat(winRateInput.value) / 100 || 0.01;
+                const meetingRate = parseFloat(meetingRateInput.value) / 100 || 0.01;
+                const leadRate = parseFloat(leadRateInput.value) / 100 || 0.01;
+
+                // Save to state
+                appState.calc = {
+                    revenue, avgDeal,
+                    winRate: winRateInput.value,
+                    meetingRate: meetingRateInput.value,
+                    leadRate: leadRateInput.value
+                };
+                saveState();
+
+                // Dynamic UI Labels
+                document.getElementById('calcWinRateVal').innerText = winRateInput.value + '%';
+                document.getElementById('calcMeetingRateVal').innerText = meetingRateInput.value + '%';
+                document.getElementById('calcLeadRateVal').innerText = leadRateInput.value + '%';
+
+                // Core Formula Calculations
+                const dealsNeeded = Math.ceil(revenue / avgDeal);
+                const oppsNeeded = Math.ceil(dealsNeeded / winRate);
+                const meetingsNeeded = Math.ceil(oppsNeeded / meetingRate);
+                const leadsNeeded = Math.ceil(meetingsNeeded / leadRate);
+
+                // Update Cards
+                document.getElementById('resDealsNeeded').innerText = dealsNeeded.toLocaleString();
+                document.getElementById('resOppsNeeded').innerText = oppsNeeded.toLocaleString();
+                document.getElementById('resMeetingsNeeded').innerText = meetingsNeeded.toLocaleString();
+                document.getElementById('resLeadsNeeded').innerText = leadsNeeded.toLocaleString();
+
+                // Update Funnel Text
+                document.getElementById('funnelLeadsText').innerText = leadsNeeded.toLocaleString();
+                document.getElementById('funnelMeetingsText').innerText = meetingsNeeded.toLocaleString();
+                document.getElementById('funnelOppsText').innerText = oppsNeeded.toLocaleString();
+                document.getElementById('funnelDealsText').innerText = dealsNeeded.toLocaleString();
+
+                // Bars relative to Leads
+                const meetingPct = Math.min(100, Math.max(5, (meetingsNeeded / leadsNeeded) * 100));
+                const oppsPct = Math.min(100, Math.max(3, (oppsNeeded / leadsNeeded) * 100));
+                const dealsPct = Math.min(100, Math.max(2, (dealsNeeded / leadsNeeded) * 100));
+
+                document.getElementById('barMeetings').style.width = meetingPct + '%';
+                document.getElementById('barOpps').style.width = oppsPct + '%';
+                document.getElementById('barDeals').style.width = dealsPct + '%';
+
+                // Tip text
+                document.getElementById('tipDealsCount').innerText = dealsNeeded;
+                document.getElementById('tipDailyLeads').innerText = Math.ceil(leadsNeeded / 22); // ~22 working days
+            }
+
+            [revenueInput, avgDealInput, winRateInput, meetingRateInput, leadRateInput].forEach(elem => {
+                elem.addEventListener('input', updateCalculations);
+            });
+
+            updateCalculations();
+        }
+
+        // ==================== TAB 3: ROUTINE TRACKER LOGIC ====================
+        const dailyTasks = [
+            { id: 0, title: "Morning Sales Standup (15 mins)", desc: "အဖွဲ့၏ နေ့စဉ် ရည်မှန်းချက်နှင့် Call Target များ စိစစ်ညှိနှိုင်းခြင်း" },
+            { id: 1, title: "Pipeline & High-Value Deal Review", desc: "ပိတ်ခါနီး Hot Deals များနှင့် တားဆီးခံနေရသော ကိစ္စများ ကူညီဖြေရှင်းခြင်း" },
+            { id: 2, title: "Live Call Shadowing / Coaching", desc: "အနည်းဆုံး Rep ၁ ဦး၏ အရောင်းဖုန်းခေါ်ဆိုမှုကို နားထောင်၍ အကြံပြုချက်ပေးခြင်း" },
+            { id: 3, title: "CRM Data & Activity Audit", desc: "CRM အတွင်း Log သွင်းထားသော Activities များနှင့် Activity metrics စိစစ်ခြင်း" },
+            { id: 4, title: "End-of-Day Performance Wrap-up", desc: "တစ်နေ့တာ ရလဒ်စိစစ်ခြင်းနှင့် နောက်တစ်နေ့အတွက် ပြင်ဆင်ရန် ညွှန်ကြားခြင်း" }
+        ];
+
+        const weeklyTasks = [
+            { id: 0, title: "Weekly 1-on-1 Coaching Session", desc: "Rep တစ်ဦးစီနှင့် သီးသန့်တွေ့ဆုံကာ Skill Gaps နှင့် စိတ်ဓာတ်မြှင့်တင်ရေး ဆွေးနွေးခြင်း" },
+            { id: 1, title: "Sales Revenue Forecast Meeting", desc: "အထက်လူကြီးများထံ လစဉ်/အပတ်စဉ် အရောင်းခန့်မှန်းချက် တင်ပြခြင်း" },
+            { id: 2, title: "Objection Playbook & Pitch Roleplay", desc: "အဖွဲ့လိုက် အရောင်းကန့်ကွက်ချက်များ တုံ့ပြန်ပုံ လေ့ကျင့်ခန်း ပြုလုပ်ခြင်း" },
+            { id: 3, title: "Lost Deal Post-Mortem Analysis", desc: "လက်လွတ်သွားသော Deals များကို လေ့လာဆန်းစစ်၍ သင်ခန်းစာထုတ်ယူခြင်း" }
+        ];
+
+        function initRoutineTracker() {
+            const dailyContainer = document.getElementById('dailyRoutineList');
+            const weeklyContainer = document.getElementById('weeklyRoutineList');
+
+            function renderRoutines() {
+                // Render Daily
+                dailyContainer.innerHTML = dailyTasks.map(task => `
+                    <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                        <input type="checkbox" data-type="daily" data-id="${task.id}" ${appState.routines.daily[task.id] ? 'checked' : ''} class="mt-1 accent-brand-500 w-4 h-4 rounded">
+                        <div>
+                            <span class="text-sm font-semibold text-slate-200 block ${appState.routines.daily[task.id] ? 'line-through text-slate-500' : ''}">${task.title}</span>
+                            <span class="text-xs text-slate-400 block mt-0.5">${task.desc}</span>
+                        </div>
+                    </label>
+                `).join('');
+
+                // Render Weekly
+                weeklyContainer.innerHTML = weeklyTasks.map(task => `
+                    <label class="flex items-start space-x-3 p-3 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                        <input type="checkbox" data-type="weekly" data-id="${task.id}" ${appState.routines.weekly[task.id] ? 'checked' : ''} class="mt-1 accent-accent-500 w-4 h-4 rounded">
+                        <div>
+                            <span class="text-sm font-semibold text-slate-200 block ${appState.routines.weekly[task.id] ? 'line-through text-slate-500' : ''}">${task.title}</span>
+                            <span class="text-xs text-slate-400 block mt-0.5">${task.desc}</span>
+                        </div>
+                    </label>
+                `).join('');
+
+                updateProgress();
+            }
+
+            function updateProgress() {
+                const total = dailyTasks.length + weeklyTasks.length;
+                const checkedDaily = appState.routines.daily.filter(Boolean).length;
+                const checkedWeekly = appState.routines.weekly.filter(Boolean).length;
+                const totalChecked = checkedDaily + checkedWeekly;
+
+                const percent = Math.round((totalChecked / total) * 100);
+
+                document.getElementById('routineProgressText').innerText = `${percent}% (${totalChecked}/${total})`;
+                document.getElementById('routineProgressBar').style.width = `${percent}%`;
+            }
+
+            // Delegation listener
+            document.addEventListener('change', (e) => {
+                if (e.target && e.target.matches('input[data-type]')) {
+                    const type = e.target.getAttribute('data-type');
+                    const id = parseInt(e.target.getAttribute('data-id'));
+                    appState.routines[type][id] = e.target.checked;
+                    saveState();
+                    renderRoutines();
+                }
+            });
+
+            document.getElementById('resetRoutineBtn').addEventListener('click', () => {
+                appState.routines.daily = [false, false, false, false, false];
+                appState.routines.weekly = [false, false, false, false];
+                saveState();
+                renderRoutines();
+                showToast('Routines reset successfully');
+            });
+
+            renderRoutines();
+        }
+
+        // ==================== TAB 4: COACHING MATRIX LOGIC ====================
+        function initCoachingMatrix() {
+            const tableBody = document.getElementById('repsTableBody');
+
+            function calculateRepStatus(rep) {
+                const avg = (rep.prospecting + rep.discovery + rep.objection + rep.closing) / 4;
+                let action = "";
+                let colorClass = "";
+
+                if (avg < 2.5) {
+                    action = "Needs Urgent Coaching (အနီးကပ် လေ့ကျင့်ပေးရန်)";
+                    colorClass = "text-red-400 bg-red-500/10 border-red-500/20";
+                } else if (avg < 3.8) {
+                    action = "Targeted Skill Roleplay (လိုအပ်သည့်အပိုင်း ဖြည့်ဆည်းရန်)";
+                    colorClass = "text-amber-400 bg-amber-500/10 border-amber-500/20";
+                } else {
+                    action = "Ready for Deal Ownership (လွတ်လပ်စွာ အရောင်းခိုင်းရန်)";
+                    colorClass = "text-brand-400 bg-brand-500/10 border-brand-500/20";
+                }
+
+                return { avg: avg.toFixed(1), action, colorClass };
+            }
+
+            function renderReps() {
+                tableBody.innerHTML = appState.reps.map((rep, idx) => {
+                    const status = calculateRepStatus(rep);
+                    return `
+                        <tr class="hover:bg-slate-800/40 transition">
+                            <td class="p-3 font-semibold text-white">
+                                <input type="text" value="${rep.name}" data-idx="${idx}" class="rep-name-input bg-transparent border-b border-transparent hover:border-slate-700 focus:border-brand-500 outline-none text-white font-semibold w-28">
+                            </td>
+                            <td class="p-3">${renderRatingSelect(idx, 'prospecting', rep.prospecting)}</td>
+                            <td class="p-3">${renderRatingSelect(idx, 'discovery', rep.discovery)}</td>
+                            <td class="p-3">${renderRatingSelect(idx, 'objection', rep.objection)}</td>
+                            <td class="p-3">${renderRatingSelect(idx, 'closing', rep.closing)}</td>
+                            <td class="p-3 font-bold text-white text-sm">${status.avg} / 5</td>
+                            <td class="p-3">
+                                <span class="px-2.5 py-1 rounded-full text-[11px] font-medium border ${status.colorClass}">
+                                    ${status.action}
+                                </span>
+                            </td>
+                            <td class="p-3 text-right">
+                                <button onclick="deleteRep(${idx})" class="text-slate-500 hover:text-red-400 p-1">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            function renderRatingSelect(idx, key, val) {
+                return `
+                    <select data-idx="${idx}" data-key="${key}" class="rep-rating-select bg-slate-950 border border-slate-800 rounded px-2 py-1 text-slate-200 outline-none focus:border-brand-500">
+                        ${[1, 2, 3, 4, 5].map(num => `<option value="${num}" ${num === val ? 'selected' : ''}>${num} ★</option>`).join('')}
+                    </select>
+                `;
+            }
+
+            // Input handlers
+            tableBody.addEventListener('change', (e) => {
+                if (e.target.classList.contains('rep-rating-select')) {
+                    const idx = e.target.getAttribute('data-idx');
+                    const key = e.target.getAttribute('data-key');
+                    appState.reps[idx][key] = parseInt(e.target.value);
+                    saveState();
+                    renderReps();
+                }
+            });
+
+            tableBody.addEventListener('blur', (e) => {
+                if (e.target.classList.contains('rep-name-input')) {
+                    const idx = e.target.getAttribute('data-idx');
+                    appState.reps[idx].name = e.target.value;
+                    saveState();
+                }
+            }, true);
+
+            document.getElementById('addRepBtn').addEventListener('click', () => {
+                appState.reps.push({
+                    name: `Rep ${appState.reps.length + 1}`,
+                    prospecting: 3,
+                    discovery: 3,
+                    objection: 3,
+                    closing: 3
+                });
+                saveState();
+                renderReps();
+                showToast('New Rep added');
+            });
+
+            window.deleteRep = function(idx) {
+                if (confirm('Are you sure you want to remove this Rep?')) {
+                    appState.reps.splice(idx, 1);
+                    saveState();
+                    renderReps();
+                    showToast('Rep removed');
+                }
+            };
+
+            renderReps();
+        }
+
+        // ==================== TAB 5: OBJECTION PLAYBOOK LOGIC ====================
+        const objectionData = [
+            {
+                id: 1,
+                category: "Price",
+                objection: "Your price is way too high compared to competitors.",
+                myanmarObjection: "မင်းတို့စျေးက တခြားပြိုင်ဘက်တွေထက် အများကြီး ပိုများနေတယ်။",
+                remedy: "Defend Value, Don't Discount Immediately",
+                script: "I completely understand that budget is critical. However, our customers find that our long-term ROI and lower maintenance costs actually save them 30% more over two years. May I show you the cost breakdown?",
+                myanmarScript: "ဘတ်ဂျက်က အရေးကြီးတာကို လုံးဝနားလည်ပါတယ်။ ဒါပေမယ့် ကျွန်တော်တို့ရဲ့ ရေရှည် ROI နဲ့ ပြုပြင်ထိန်းသိမ်းစရိတ် သက်သာမှုကြောင့် ၂ နှစ်အတွင်း ၃၀% မက ပိုပြီး သက်သာစေပါတယ်။ စျေးနှုန်းတွက်ချက်မှုကို ပိုရှင်းအောင် ပြပေးပါရစေ။"
+            },
+            {
+                id: 2,
+                category: "Authority",
+                objection: "I need to discuss this with my boss / board of directors.",
+                myanmarObjection: "ဒါကို အထက်လူကြီး/ဘုတ်အဖွဲ့နဲ့ ပြန်တိုင်ပင်ရပါဦးမယ်။",
+                remedy: "Enable the Internal Champion",
+                script: "That makes total sense. To help you present this effectively to your leadership, would it be helpful if I prepared a 1-page business case summary or joined a brief 15-minute call with them?",
+                myanmarScript: "အပြည့်အဝ သဘောတူပါတယ်။ အထက်လူကြီးတွေကို အလွယ်တကူ တင်ပြနိုင်ဖို့ ၁ စာမျက်နှာပါ အကျဉ်းချုပ် ပြင်ဆင်ပေးရမလား၊ ဒါမှမဟုတ် သူတို့နဲ့ ၁၅ မိနစ်စာ ဆွေးနွေးပွဲမှာ ကျွန်တော် တိုက်ရိုက် ပါဝင်ရှင်းပြပေးရမလားခင်ဗျ။"
+            },
+            {
+                id: 3,
+                category: "Competition",
+                objection: "We are currently using Provider X and we are happy with them.",
+                myanmarObjection: "ကျနော်တို့ လက်ရှိ တခြား Provider X ကို သုံးနေတာ အဆင်ပြေပါတယ်။",
+                remedy: "Uncover Unmet Needs",
+                script: "Provider X is indeed a solid option. Many of our current clients used them previously as well. What they found missing was specialized 24/7 support and custom integration—is that something important to your team?",
+                myanmarScript: "Provider X က တကယ်ကောင်းတဲ့ ကုမ္ပဏီပါ။ လက်ရှိ ကျွန်တော်တို့ ဖောက်သည်အများစုလည်း အရင်က သူတို့ကို သုံးခဲ့ကြတာပါ။ ဒါပေမယ့် ၂၄ နာရီ သီးသန့် Support ရရှိဖို့နဲ့ စိတ်ကြိုက် ချိတ်ဆက်သုံးစွဲနိုင်မှုကို ပိုမိုလိုအပ်လာကြပါတယ်။"
+            },
+            {
+                id: 4,
+                category: "Timing",
+                objection: "We don't have time or budget to implement this right now. Call back next quarter.",
+                myanmarObjection: "လက်ရှိမှာ အကောင်အထည်ဖော်ဖို့ အချိန်နဲ့ ဘတ်ဂျက် မရှိသေးပါ။ နောက် Quarter မှ ပြန်ဆက်သွယ်ပါ။",
+                remedy: "Create Urgency & Highlight Cost of Inaction",
+                script: "I hear you. Many teams wait until next quarter, but delaying often costs them more in lost productivity during peak season. If we start with a small pilot now, there is zero upfront resource strain.",
+                myanmarScript: "နားလည်ပါပြီခင်ဗျာ။ နောက် Quarter ထိ စောင့်ဆိုင်းခြင်းက ရာသီချိန် အမီ မပြီးစီးဘဲ ပိုမို ဆုံးရှုံးနိုင်ပါတယ်။ အခု သေးငယ်တဲ့ Pilot အနေနဲ့ စတင်မယ်ဆိုရင် ကုန်ကျစရိတ် ဝန်ထုတ်ဝန်ပိုး မရှိဘဲ စတင်နိုင်မှာပါ။"
+            }
+        ];
+
+        function initObjectionPlaybook() {
+            const container = document.getElementById('objectionsContainer');
+            const searchInput = document.getElementById('objectionSearch');
+            const categoryBtns = document.querySelectorAll('.obj-filter-btn');
+
+            let selectedCat = 'all';
+
+            function renderObjections() {
+                const query = searchInput.value.toLowerCase();
+
+                const filtered = objectionData.filter(item => {
+                    const matchesCat = selectedCat === 'all' || item.category === selectedCat;
+                    const matchesSearch = item.objection.toLowerCase().includes(query) ||
+                                          item.myanmarObjection.toLowerCase().includes(query) ||
+                                          item.script.toLowerCase().includes(query);
+                    return matchesCat && matchesSearch;
+                });
+
+                if (filtered.length === 0) {
+                    container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-500">No matching objections found.</div>`;
+                    return;
+                }
+
+                container.innerHTML = filtered.map(item => `
+                    <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl space-y-4 hover:border-slate-700 transition flex flex-col justify-between">
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-start">
+                                <span class="px-2.5 py-1 bg-brand-500/10 border border-brand-500/20 text-brand-400 text-[11px] font-semibold rounded-full uppercase tracking-wider">
+                                    ${item.category} Objection
+                                </span>
+                                <button onclick="speakText('${item.script.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-brand-400 p-1 transition" title="Listen Audio">
+                                    <i class="fa-solid fa-volume-high text-base"></i>
+                                </button>
+                            </div>
+
+                            <div>
+                                <h4 class="font-bold text-white text-base">"${item.objection}"</h4>
+                                <p class="text-xs text-amber-400/90 mt-1 font-medium">မြန်မာ: "${item.myanmarObjection}"</p>
+                            </div>
+
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1.5">
+                                <div class="text-[11px] font-bold text-accent-400 uppercase">Recommended Script:</div>
+                                <p id="objScript_${item.id}" class="text-xs text-slate-200 leading-relaxed font-sans">${item.script}</p>
+                                <p class="text-[11px] text-slate-400 leading-relaxed border-t border-slate-800/60 pt-1.5 mt-1">
+                                    <strong>တုံ့ပြန်နည်း:</strong> ${item.myanmarScript}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-800/60 text-xs">
+                            <span class="text-slate-500 font-medium">Strategy: ${item.remedy}</span>
+                            <button onclick="copyToClipboard('objScript_${item.id}')" class="text-slate-400 hover:text-brand-400 flex items-center space-x-1 font-medium transition">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy Script</span>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            searchInput.addEventListener('input', renderObjections);
+
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryBtns.forEach(b => {
+                        b.classList.remove('bg-brand-600', 'text-white');
+                        b.classList.add('bg-slate-900', 'text-slate-300');
+                    });
+                    btn.classList.remove('bg-slate-900', 'text-slate-300');
+                    btn.classList.add('bg-brand-600', 'text-white');
+
+                    selectedCat = btn.getAttribute('data-cat');
+                    renderObjections();
+                });
+            });
+
+            renderObjections();
+        }
+
+        // ==================== TAB 6: STALLED DEAL DIAGNOSTIC LOGIC ====================
+        const diagnosticQuestions = [
+            { id: 'q1', text: "Decision Maker / C-Level များနှင့် တိုက်ရိုက် မဆွေးနွေးရသေးခြင်း (No C-Level Access)", weight: 'authority' },
+            { id: 'q2', text: "ဝယ်ယူလိုသည့် အချိန်ဇယား မရေမရာဖြစ်နေခြင်း (No Clear Timeline / Urgency)", weight: 'timing' },
+            { id: 'q3', text: "ဝယ်သူဘက်မှ သီးသန့် ဘတ်ဂျက် သတ်မှတ်ထားခြင်း မရှိခြင်း (No Allocated Budget)", weight: 'budget' },
+            { id: 'q4', text: "Proposal တင်ပြီးနောက် ၁ ပတ်ကျော်အထိ တုံ့ပြန်မှု မရရှိတော့ခြင်း (Ghosting after Proposal)", weight: 'ghosting' },
+            { id: 'q5', text: "ပြိုင်ဘက်များ၏ စျေးနှုန်းနှင့် နှိုင်းယှဉ်ကာ တွေဝေနေခြင်း (Price Hesitation vs Competitors)", weight: 'value' }
+        ];
+
+        function initStalledDealDiagnostic() {
+            const checklistContainer = document.getElementById('diagnosticChecklist');
+
+            checklistContainer.innerHTML = diagnosticQuestions.map(q => `
+                <label class="flex items-start space-x-3 p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 cursor-pointer transition">
+                    <input type="checkbox" value="${q.weight}" class="diag-checkbox mt-1 accent-red-500 w-4 h-4 rounded">
+                    <span class="text-xs font-semibold text-slate-200 leading-relaxed">${q.text}</span>
+                </label>
+            `).join('');
+
+            document.querySelectorAll('.diag-checkbox').forEach(cb => {
+                cb.addEventListener('change', evaluateDiagnosis);
+            });
+
+            function evaluateDiagnosis() {
+                const checked = Array.from(document.querySelectorAll('.diag-checkbox:checked')).map(c => c.value);
+                const resultBox = document.getElementById('diagnosticResultBox');
+                const statusTitle = document.getElementById('diagStatusTitle');
+                const statusDesc = document.getElementById('diagStatusDesc');
+
+                if (checked.length === 0) {
+                    statusTitle.innerText = "Select items to diagnose deal";
+                    statusDesc.innerText = "ဘေးဘက်မှ စစ်ဆေးချက်များ အမှန်ခြစ်ပါက အဓိက ပြဿနာအရင်းအမြစ်နှင့် ဖြေရှင်းရန် နည်းလမ်းများကို ဖော်ပြပေးပါမည်။";
+                    return;
+                }
+
+                if (checked.includes('authority') || checked.includes('ghosting')) {
+                    statusTitle.innerText = "Diagnosis: Lack of Decision Maker Buying Center";
+                    statusDesc.innerHTML = `
+                        <strong>အဓိက ပြဿနာ:</strong> အမှန်တကယ် ဆုံးဖြတ်နိုင်သူများထံ မရောက်ရှိသေးဘဲ အောက်ခြေ ဝန်ထမ်းများနှင့်သာ ညှိနှိုင်းနေရခြင်း ဖြစ်နိုင်သည်။<br><br>
+                        <strong>အကြံပြုချက် Action:</strong>
+                        <ul class="list-disc list-inside mt-1 space-y-1">
+                            <li>အထက်လူကြီးပါဝင်သော 15-minute Executive Alignment Call တောင်းဆိုပါ။</li>
+                            <li>အောက်ခြေ Contact အား Champion အဖြစ် ပြောင်းလဲရန် Executive Summary တင်ပြပါ။</li>
+                        </ul>
+                    `;
+                } else if (checked.includes('timing') || checked.includes('budget')) {
+                    statusTitle.innerText = "Diagnosis: Weak Pain Point & ROI Justification";
+                    statusDesc.innerHTML = `
+                        <strong>အဓိက ပြဿနာ:</strong> စနစ်မသုံးပါက ကြုံတွေ့ရမည့် ကုန်ကျစရိတ် (Cost of Inaction) ကို ဝယ်သူမှ သဘောမပေါက်သေးခြင်း ဖြစ်သည်။<br><br>
+                        <strong>အကြံပြုချက် Action:</strong>
+                        <ul class="list-disc list-inside mt-1 space-y-1">
+                            <li>ROI Calculator သုံး၍ လစဉ် ဆုံးရှုံးနေသော ငွေပမာဏကို တွက်ချက်ပြပါ။</li>
+                            <li>အချိန်တိုအတွင်း စတင်နိုင်သော Phased Rollout အစီအစဉ် ကမ်းလှမ်းပါ။</li>
+                        </ul>
+                    `;
+                } else {
+                    statusTitle.innerText = "Diagnosis: Value Perception Gap";
+                    statusDesc.innerHTML = `
+                        <strong>အဓိက ပြဿနာ:</strong> ပြိုင်ဘက်များနှင့် ကွဲပြားသော တန်ဖိုး (Unique Value Proposition) ကို ရှင်းလင်းစွာ မပြသနိုင်သေးခြင်း။<br><br>
+                        <strong>အကြံပြုချက် Action:</strong> Case Study သာဓကများ ပြသ၍ Break-up email စာတို ပေးပို့ပါ။
+                    `;
+                }
+            }
+        }
+
+        // ==================== TAB 7: ENGLISH PHRASE SIMULATOR LOGIC ====================
+        const phraseData = [
+            {
+                id: 1,
+                cat: "opening",
+                phrase: "Thanks for taking the time today. To ensure we make the best use of our 30 minutes, what is your top priority for this meeting?",
+                myanmar: "ယနေ့ အချိန်ပေးတဲ့အတွက် ကျေးဇူးတင်ပါတယ်။ မိနစ် ၃၀ ကို ထိရောက်စွာ အသုံးပြုနိုင်ဖို့ ဒီတွေ့ဆုံမှုမှာ လူကြီးမင်းတို့ရဲ့ အဓိက ဦးစားပေးက ဘာဖြစ်မလဲခင်ဗျာ။"
+            },
+            {
+                id: 2,
+                cat: "opening",
+                phrase: "Before we dive into the demo, could you walk me through your current workflow and where the main bottlenecks are?",
+                myanmar: "Demo မပြမီ လက်ရှိ အလုပ်လုပ်ပုံ လုပ်ငန်းစဉ်နဲ့ ဘယ်နေရာတွေမှာ အဓိက ကြန့်ကြာမှုတွေ ရှိနေလဲဆိုတာ ရှင်းပြပေးနိုင်မလားခင်ဗျာ။"
+            },
+            {
+                id: 3,
+                cat: "pitching",
+                phrase: "Our solution is specifically designed to automate repetitive sales tasks, which directly reduces manual data entry time by 40%.",
+                myanmar: "ကျွန်တော်တို့၏ စနစ်သည် ထပ်ခါတလဲလဲ လုပ်ဆောင်ရသော အရောင်းလုပ်ငန်းစဉ်များကို အလိုအလျောက် ပြုလုပ်ပေးရန် ဒီဇိုင်းထုတ်ထားပြီး Data ထည့်သွင်းရသည့် အချိန်ကို ၄၀% ထိ လျှော့ချပေးပါတယ်။"
+            },
+            {
+                id: 4,
+                cat: "closing",
+                phrase: "Based on our discussion, if we can guarantee deployment within two weeks, are you ready to approve the proposal today?",
+                myanmar: "ကျွန်တော်တို့ ဆွေးနွေးချက်အရ သီတင်းပတ် ၂ ပတ်အတွင်း စတင်နိုင်ရေး အာမခံနိုင်ပါက ဒီနေ့ Proposal ကို အတည်ပြုပေးဖို့ အဆင်ပြေနိုင်မလားခင်ဗျာ။"
+            },
+            {
+                id: 5,
+                cat: "coaching",
+                phrase: "You handled that objection very calmly. Next time, try asking an open-ended question right after to keep the buyer engaged.",
+                myanmar: "ကန့်ကွက်ချက်ကို တည်ငြိမ်စွာ ဖြေရှင်းသွားတာ အလွန်ကောင်းပါတယ်။ နောက်တစ်ကြိမ်မှာ ဝယ်သူ ပိုမို စိတ်ပါဝင်စားလာစေဖို့ ဖြေရှင်းပြီးသည်နှင့် Open-ended မေးခွန်း မေးကြည့်ပါ။"
+            }
+        ];
+
+        function initPhraseSimulator() {
+            const container = document.getElementById('phrasesContainer');
+            const categoryBtns = document.querySelectorAll('.phrase-cat-btn');
+
+            let selectedCat = 'all';
+
+            function renderPhrases() {
+                const filtered = phraseData.filter(item => selectedCat === 'all' || item.cat === selectedCat);
+
+                container.innerHTML = filtered.map(item => `
+                    <div class="p-5 bg-slate-900 border border-slate-800 rounded-2xl space-y-3 hover:border-slate-700 transition flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="px-2.5 py-0.5 bg-accent-500/10 border border-accent-500/20 text-accent-400 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                                    ${item.cat}
+                                </span>
+                                <button onclick="speakText('${item.phrase.replace(/'/g, "\\'")}')" class="p-2 bg-brand-600/20 hover:bg-brand-600 text-brand-400 hover:text-white rounded-xl transition flex items-center space-x-1.5 text-xs font-semibold">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                    <span>Listen Audio</span>
+                                </button>
+                            </div>
+
+                            <p id="phraseText_${item.id}" class="text-sm font-semibold text-white leading-relaxed pt-1">
+                                "${item.phrase}"
+                            </p>
+
+                            <p class="text-xs text-slate-400 leading-relaxed border-t border-slate-800/80 pt-2">
+                                <strong>မြန်မာဘာသာပြန်:</strong> ${item.myanmar}
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800/60 flex justify-end">
+                            <button onclick="copyToClipboard('phraseText_${item.id}')" class="text-xs text-slate-400 hover:text-brand-400 font-medium transition flex items-center space-x-1">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy Phrase</span>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryBtns.forEach(b => {
+                        b.classList.remove('bg-brand-600', 'text-white');
+                        b.classList.add('bg-slate-900', 'text-slate-300');
+                    });
+                    btn.classList.remove('bg-slate-900', 'text-slate-300');
+                    btn.classList.add('bg-brand-600', 'text-white');
+
+                    selectedCat = btn.getAttribute('data-phrase-cat');
+                    renderPhrases();
+                });
+            });
+
+            renderPhrases();
+        }
+
+        // Reset All Global State Button
+        document.getElementById('resetDataBtn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all stored metrics, reps, and routines?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        });
+
+        // Initialize Everything on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedState();
+            initNavigation();
+            initCalculator();
+            initRoutineTracker();
+            initCoachingMatrix();
+            initObjectionPlaybook();
+            initStalledDealDiagnostic();
+            initPhraseSimulator();
+        });
+    </script>
+</body>
+</html>
